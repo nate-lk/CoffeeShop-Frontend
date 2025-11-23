@@ -46,9 +46,9 @@ const Login = () => {
 
   useEffect(() => {
     const messageListener = (event) => {
-      if (event.origin !== "https://velvetroast.duckdns.org") {
-        return;
-      }
+      // if (event.origin !== "https://velvetroast.duckdns.org") {
+      //   return;
+      // }
       console.log("Received message:", event.data);
       const { token, email } = event.data;
       if (token) {
