@@ -46,7 +46,12 @@ const Login = () => {
 
   useEffect(() => {
     const messageListener = (event) => {
-      if (event.origin !== "https://velvetroast.duckdns.org/auth") return;
+      if (event.origin !== "https://velvetroast.duckdns.org/auth") {
+        toast.error("Lỗi khi đăng nhập GG. Vui lòng thử lại.");
+        setTimeout(() => {
+          return;
+        }, 2000);
+      }
       const { token, email } = event.data;
       if (token) {
         setToken(token);

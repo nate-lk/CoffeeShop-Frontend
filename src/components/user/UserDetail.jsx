@@ -74,7 +74,7 @@ const UserDetail = ({ asModal = false, showModal, setShowModal }) => {
 
       if (!res.data.success) throw new Error("Không thể đặt địa chỉ mặc định");
       setUserDetail(res.data);
-      toast.success("Đặt địa chỉ mặc định thành công");
+      // toast.success("Đặt địa chỉ mặc định thành công");
       setShowAddModal(false);
       setReloadAddress((prev) => prev + 1);
     } catch (err) {
