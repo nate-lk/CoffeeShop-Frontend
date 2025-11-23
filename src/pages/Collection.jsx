@@ -175,7 +175,7 @@ const Collection = () => {
       {/* Cards */}
       <div className="flex-1">
         {/* Header */}
-        <div className="flex justify-between items-center text-base sm:text-2xl mb-4">
+        <div className="flex justify-between items-center text-base sm:text-l mb-4">
           <Title text1="TẤT CẢ " text2="SẢN PHẨM" />
           <select
             className="border border-gray-300 text-sm px-3 py-2 bg-white shadow-sm hover:border-gray-400 focus:outline-none"

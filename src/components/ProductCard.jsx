@@ -7,7 +7,7 @@ import {
 
 const ProductCard = ({ product }) => {
   return (
-    <Card className="w-48 h-[300px] flex flex-col overflow-hidden border border-gray-300 shadow-sm hover:shadow-md transition-all duration-300 rounded-none">
+    <Card className="w-44 sm:w-48 sm:h-[300px] h-[280px] flex flex-col overflow-hidden border border-gray-300 shadow-sm hover:shadow-md transition-all duration-300 rounded-none">
       {/* Image Section */}
       <CardHeader className="p-0 bg-white flex items-center justify-center h-80 overflow-hidden">
         <img
