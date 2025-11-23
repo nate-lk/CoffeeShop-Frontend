@@ -74,31 +74,30 @@ const Product = () => {
     <div className="border-t pt-10 px-4 sm:px-10 transition-opacity duration-500">
       <div className="flex flex-col sm:flex-row gap-10">
         {/* Image Section */}
-        <div className="flex-1 flex flex-col sm:flex-row gap-4">
-          {/* Thumbnail list */}
-  {/* Thumbnails */}
-   <div className="flex sm:flex-col gap-2 w-full sm:w-[120px] overflow-x-auto sm:overflow-y-auto shrink-0">
-    {productData.image?.map((item, index) => (
-      <img
-        key={index}
-        src={item}
-        onClick={() => setImage(item)}
-        alt="Product thumbnail"
-        className={`cursor-pointer border-2 w-20 h-20 object-cover rounded-md transition-all duration-200 ${
-          image === item ? "border-amber-700" : "border-transparent"
-        } hover:opacity-80`}
-      />
-    ))}
-  </div>
+        <div className="flex-1 flex flex-col gap-4">
+          {/* Main Image */}
+          <div className="flex justify-center items-center w-full h-auto sm:h-[500px]">
+            <img
+              src={image}
+              alt={productData.name}
+              className="max-h-full w-full object-contain shadow-md transition-transform duration-300 hover:scale-105"
+            />
+          </div>
 
-  {/* Main Image */}
-  <div className="flex flex-1 min-w-0 justify-center items-center">
-    <img
-      src={image}
-      alt={productData.name}
-      className="max-h-[600px] w-full object-contain shadow-md transition-transform duration-300 hover:scale-105"
-    />
-  </div>
+          {/* Thumbnails (horizontal, square) */}
+          <div className="flex gap-2 w-full overflow-x-auto justify-center">
+            {productData.image?.map((item, index) => (
+              <img
+                key={index}
+                src={item}
+                onClick={() => setImage(item)}
+                alt="thumbnail"
+                className={`cursor-pointer border-2 w-20 h-20 object-cover rounded-md transition-all duration-200 ${
+                  image === item ? "border-amber-700" : "border-transparent"
+                } hover:opacity-80`}
+              />
+            ))}
+          </div>
         </div>
 
         {/* Product Info */}
