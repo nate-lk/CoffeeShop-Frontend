@@ -1,6 +1,8 @@
 import axios from "axios";
 import Swal from "sweetalert2";
 
+const BASE_REFRESH = import.meta.env.VITE_API_REFRESH;;
+
 const api = axios.create({
   withCredentials: true
 });
@@ -45,7 +47,7 @@ api.interceptors.response.use(
 
     isRefreshing = true;
     try {
-      const res = await refreshApi.post("http://localhost:4002/api/user/refresh");
+      const res = await refreshApi.post(BASE_REFRESH);
       const newToken = res.data.accessToken;
 
       localStorage.setItem("token", newToken);
