@@ -5,6 +5,7 @@ import { ShopContext } from "../../context/ShopContext";
 import { CartContext } from "../../context/CartContext";
 import { UserContext } from "../../context/UserContext";
 import { FiShoppingCart, FiUser } from "react-icons/fi";
+import { Home, Store, Info } from "lucide-react";
 
 const Navbar = () => {
   const baseClass = "flex flex-col items-center gap-1 group";
@@ -22,6 +23,20 @@ const Navbar = () => {
           className="w-28 h-auto hidden sm:block"
         />
       </Link>
+      {/* mobile menu */}
+      <ul className="flex sm:hidden gap-6 text-xl">
+        <NavLink to="/" className="p-1 hover:text-amber-300">
+          <Home />
+        </NavLink>
+
+        <NavLink to="/shop" className="p-1 hover:text-amber-300">
+          <Store />
+        </NavLink>
+
+        <NavLink to="/about" className="p-1 hover:text-amber-300">
+          <Info />
+        </NavLink>
+      </ul>
 
       <div className="flex flex-col items-center">
         <img
@@ -83,48 +98,6 @@ const Navbar = () => {
           </button>
         </Link>
         {/* Mobile Menu */}
-        <button
-          onClick={() => setVisible(true)}
-          className="w-6 cursor-pointer sm:hidden invert brightness-0 saturate-0"
-        >
-          <img src={assets.menu_icon} alt="menu" />
-        </button>
-      </div>
-
-      {/* Sidebar mobile */}
-      <div
-        className={`fixed sm:hidden top-0 right-0 bottom-0 overflow-hidden bg-[#4e342e] text-white transition-all z-50 ${
-          visible ? "w-full" : "w-0"
-        }`}
-      >
-        <div className="flex flex-col">
-          <div
-            onClick={() => setVisible(false)}
-            className="flex items-center gap-4 p-4 cursor-pointer"
-          >
-            <img
-              src={assets.dropdown_icon}
-              className="h-4 rotate-180 invert brightness-0 saturate-0"
-              alt="back"
-            />
-            <p>Back</p>
-          </div>
-
-          {[
-            { name: "TRANG CHỦ", path: "/" },
-            { name: "CỬA HÀNG", path: "/shop" },
-            { name: "GIỚI THIỆU", path: "/about" },
-          ].map((item) => (
-            <NavLink
-              key={item.name}
-              onClick={() => setVisible(false)}
-              className="py-3 pl-6 border-b border-stone-600 hover:bg-[#5d4037] transition-colors"
-              to={item.path}
-            >
-              {item.name}
-            </NavLink>
-          ))}
-        </div>
       </div>
     </div>
   );
