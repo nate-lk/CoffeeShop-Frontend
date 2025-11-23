@@ -16,7 +16,11 @@ const Navbar = () => {
   return (
     <div className="flex items-center justify-between py-3 px-4 md:px-8 sticky top-0 z-50 bg-[#3e2723] text-white shadow-lg">
       <Link to="/">
-        <img src={assets.logo} alt="Logo" className="w-28 h-auto" />
+        <img
+          src={assets.logo}
+          alt="Logo"
+          className="w-28 h-auto hidden sm:block"
+        />
       </Link>
 
       <div className="flex flex-col items-center">
@@ -49,13 +53,13 @@ const Navbar = () => {
       </div>
 
       {/* LOG IN */}
-      <div className="flex flex-col items-end gap-2 w-40">
+      <div className="flex flex-row sm:flex-col items-center sm:items-end gap-2 w-auto">
         {" "}
         {/* fixed width for container */}
         {/* Profile top-right */}
         <Link to={!token ? "/login" : "/user"}>
           <button className="flex items-center gap-2 px-4 py-2 rounded-full border w-full overflow-hidden">
-            <span className="truncate">
+            <span className="truncate hidden sm:inline">
               {!token
                 ? "Đăng nhập"
                 : `Xin chào, ${
@@ -68,7 +72,8 @@ const Navbar = () => {
         {/* CART */}
         <Link to={!token ? "/login" : "/cart"}>
           <button className="relative flex items-center justify-center gap-2 p-2 px-4 rounded-full border w-full">
-            <span>Giỏ hàng</span>
+            <span className="hidden sm:inline">Giỏ hàng</span>
+
             <FiShoppingCart className="w-6 h-6" />
             {token && cartCountTotal > 0 && (
               <span className="absolute -top-2 -right-2 w-5 h-5 flex items-center justify-center bg-amber-600 text-white text-[10px] rounded-full font-semibold">
