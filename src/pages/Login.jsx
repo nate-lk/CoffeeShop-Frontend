@@ -38,7 +38,7 @@ const Login = () => {
     const top = window.screen.height / 2 - height / 2;
 
     window.open(
-      "/auth/google/login",
+      "https://velvetroast.duckdns.org/auth/google/login",
       "GoogleLogin",
       `width=${width},height=${height},top=${top},left=${left}`
     );
