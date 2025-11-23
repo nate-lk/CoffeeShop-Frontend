@@ -52,6 +52,7 @@ const Login = () => {
           return;
         }, 2000);
       }
+      console.log("Received message:", event.data);
       const { token, email } = event.data;
       if (token) {
         setToken(token);
