@@ -3,7 +3,7 @@ import { ShopContext } from "../context/ShopContext";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { userApi } from "../../api/user-api";
-import { authApi } from "../../api/oauth-api";
+import { oauthApi } from "../../api/oauth-api";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -47,10 +47,7 @@ const Login = () => {
   useEffect(() => {
     const messageListener = (event) => {
       if (event.origin !== "https://velvetroast.duckdns.org") {
-        toast.error("Lỗi khi đăng nhập GG. Vui lòng thử lại.");
-        setTimeout(() => {
-          return;
-        }, 2000);
+        return;
       }
       console.log("Received message:", event.data);
       const { token, email } = event.data;
