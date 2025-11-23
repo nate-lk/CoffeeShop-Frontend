@@ -230,7 +230,7 @@ const Collection = () => {
 
         {/* Product Grid */}
         <div
-          className="grid gap-2 sm:gap-5 
+          className="grid gap-1 sm:gap-5 
   grid-cols-[repeat(auto-fit,minmax(12rem,max-content))] justify-center"
         >
           {filterProducts.map((item) => (
