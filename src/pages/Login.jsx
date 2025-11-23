@@ -38,7 +38,7 @@ const Login = () => {
     const top = window.screen.height / 2 - height / 2;
 
     window.open(
-      "http://localhost:4001/auth/google/login",
+      "/auth/google/login",
       "GoogleLogin",
       `width=${width},height=${height},top=${top},left=${left}`
     );
@@ -46,11 +46,11 @@ const Login = () => {
 
   useEffect(() => {
     const messageListener = (event) => {
-      if (event.origin !== "http://localhost:4001") return;
+      if (event.origin !== "https://velvetroast.duckdns.org/auth") return;
       const { token, email } = event.data;
       if (token) {
         setToken(token);
-        toast.success(`Đăng nhập với ${email}`);
+        // toast.success(`Đăng nhập với ${email}`);
         navigate("/");
         window.removeEventListener("message", messageListener);
       }
