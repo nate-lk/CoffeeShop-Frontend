@@ -3,6 +3,7 @@ import { ShopContext } from "../context/ShopContext";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { userApi } from "../../api/user-api";
+import { authApi } from "../../api/oauth-api";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -19,7 +20,7 @@ const Login = () => {
         setToken(response.data.token);
         setEmail("");
         setPassword("");
-        toast.success("Đăng nhập thành công!");
+        // toast.success("Đăng nhập thành công!");
         setTimeout(() => navigate("/"), 1000);
       } else {
         toast.error(response.data.message);
