@@ -8,6 +8,12 @@ a.active hr {
   display: block;
 }
 
+@media (max-width: 640px) {
+  html {
+    font-size: 14px; /* shrink everything slightly */
+  }
+}
+
 @font-face {
   font-family: 'MyFont';
   src: url('./assets/MyFont.ttf') format('truetype');
