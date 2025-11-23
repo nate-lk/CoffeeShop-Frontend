@@ -76,28 +76,29 @@ const Product = () => {
         {/* Image Section */}
         <div className="flex-1 flex flex-col sm:flex-row gap-4">
           {/* Thumbnail list */}
-          <div className="flex sm:flex-col overflow-x-auto sm:overflow-y-auto gap-2 sm:w-[18%] w-full">
-            {productData.image?.map((item, index) => (
-              <img
-                key={index}
-                src={item}
-                onClick={() => setImage(item)}
-                alt="Product thumbnail"
-                className={`cursor-pointer  border-2 transition-all duration-200 ${
-                  image === item ? "border-amber-700" : "border-transparent"
-                } hover:opacity-80`}
-              />
-            ))}
-          </div>
+  {/* Thumbnails */}
+   <div className="flex sm:flex-col gap-2 w-full sm:w-[120px] overflow-x-auto sm:overflow-y-auto shrink-0">
+    {productData.image?.map((item, index) => (
+      <img
+        key={index}
+        src={item}
+        onClick={() => setImage(item)}
+        alt="Product thumbnail"
+        className={`cursor-pointer border-2 w-20 h-20 object-cover rounded-md transition-all duration-200 ${
+          image === item ? "border-amber-700" : "border-transparent"
+        } hover:opacity-80`}
+      />
+    ))}
+  </div>
 
-          {/* Main Image */}
-          <div className="w-full sm:w-[80%] flex justify-center">
-            <img
-              src={image}
-              alt={productData.name}
-              className="w-full max-h-[600px] object-contain  shadow-md transition-transform duration-300 hover:scale-105"
-            />
-          </div>
+  {/* Main Image */}
+  <div className="flex flex-1 min-w-0 justify-center items-center">
+    <img
+      src={image}
+      alt={productData.name}
+      className="max-h-[600px] w-full object-contain shadow-md transition-transform duration-300 hover:scale-105"
+    />
+  </div>
         </div>
 
         {/* Product Info */}
