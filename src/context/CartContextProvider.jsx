@@ -246,24 +246,44 @@ const CartContextProvider = (props) => {
 
   useEffect(() => {
     const fetchCart = async () => {
+      const maxRetries = 3;
+      let attempt = 0;
+
       setLoading(true);
-      try {
-        const res = await cartApi.getCart();
 
-        const data = res.data.items.map((item) => ({
-          cartId: item._id,
-          productId: item.product.product._id,
-          name: item.product.product.name,
-          price: item.product.product.price,
-          quantity: item.quantity,
-          image: item.product.product.image[0],
-        }));
+      while (attempt < maxRetries) {
+        try {
+          const res = await cartApi.getCart();
 
-        setCartItems(data);
-      } catch (err) {
-        console.error("Error fetching cart:", err);
-      } finally {
-        setLoading(false);
+          if (res.data?.items) {
+            const data = res.data.items.map((item) => ({
+              cartId: item._id,
+              productId: item.product.product._id,
+              name: item.product.product.name,
+              price: item.product.product.price,
+              quantity: item.quantity,
+              image: item.product.product.image[0],
+            }));
+
+            setCartItems(data);
+          }
+
+          return; // success → stop
+        } catch (err) {
+          attempt++;
+
+          // Retry silently
+          if (attempt < maxRetries) {
+            await new Promise((res) => setTimeout(res, 300));
+            continue;
+          }
+
+          // Final failure → silent fallback
+          console.log("Cart fetch failed after retries:", err.message);
+          return;
+        } finally {
+          setLoading(false);
+        }
       }
     };
 

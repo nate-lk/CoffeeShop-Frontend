@@ -45,30 +45,66 @@ const ShopContextProvider = (props) => {
   }, [token]);
 
   const getProductsData = async () => {
-    try {
-      const response = await productApi.getProduct(page, limit);
-      if (response.data.success) {
-        setProducts(response.data.products);
-        setTotalPages(response.data.totalPages);
-      } else {
+    const maxRetries = 3;
+    let attempt = 0;
+
+    while (attempt < maxRetries) {
+      try {
+        const response = await productApi.getProduct(page, limit);
+
+        if (response.data.success) {
+          setProducts(response.data.products);
+          setTotalPages(response.data.totalPages);
+          return;
+        }
+
+        // If backend returns non-success business error
+        // you MAY show a toast (this is not network error)
         toast.error(response.data.message);
+        return;
+      } catch (_) {
+        attempt++;
+        if (attempt < maxRetries) {
+          await new Promise((res) => setTimeout(res, 300)); // small backoff
+          continue;
+        }
+
+        // Only after all retries fail, show silent fallback
+        console.log("Network unstable. Showing cached UI instead.");
+        return;
       }
-    } catch (error) {
-      console.log(error);
-      toast.error(error.message);
     }
   };
+
   const getCategoriesData = async () => {
-    try {
-      const response = await categoryApi.getCategory();
-      if (response.data.success) {
-        setCategories(response.data.category);
-      } else {
+    const maxRetries = 3;
+    let attempt = 0;
+
+    while (attempt < maxRetries) {
+      try {
+        const response = await categoryApi.getCategory();
+
+        if (response.data.success) {
+          setCategories(response.data.category);
+          return;
+        }
+
+        // Business-level error (coming from backend, not network)
         toast.error(response.data.message);
+        return;
+      } catch (err) {
+        attempt++;
+
+        // Retry silently for network or temporary failures
+        if (attempt < maxRetries) {
+          await new Promise((res) => setTimeout(res, 300)); // brief backoff
+          continue;
+        }
+
+        // After exhaust retries → silent fallback
+        console.log("Failed to fetch categories after retries:", err.message);
+        return;
       }
-    } catch (error) {
-      console.log(error);
-      toast.error(error.message);
     }
   };
 

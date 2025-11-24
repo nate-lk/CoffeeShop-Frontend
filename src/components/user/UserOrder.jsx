@@ -20,17 +20,40 @@ const UserOrders = () => {
 
   useEffect(() => {
     const fetchOrders = async () => {
-      try {
-        const res = await orderApi.getUserOrders(page, limit);
-        if (res.data && res.data.orders) {
-          setOrders(res.data.orders);
-          setTotalPages(res.data.totalPages);
+      const maxRetries = 3;
+      const timeoutMs = 5000;
+
+      const withTimeout = (promise, ms) =>
+        Promise.race([
+          promise,
+          new Promise((_, reject) =>
+            setTimeout(() => reject(new Error("timeout")), ms)
+          ),
+        ]);
+
+      for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+          const res = await withTimeout(
+            orderApi.getUserOrders(page, limit),
+            timeoutMs
+          );
+
+          if (res.data && res.data.orders) {
+            setOrders(res.data.orders);
+            setTotalPages(res.data.totalPages);
+          }
+          return;
+        } catch (err) {
+          if (attempt === maxRetries) {
+            console.log("Fetch orders failed:", err.message);
+          } else {
+            await new Promise((r) => setTimeout(r, 300));
+          }
         }
-      } catch (err) {
-        console.error("Error fetching orders:", err);
       }
     };
-    fetchOrders();
+
+    if (token) fetchOrders();
   }, [token, page, limit]);
 
   const formatCurrency = (value) =>

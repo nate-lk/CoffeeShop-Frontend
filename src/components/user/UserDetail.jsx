@@ -16,16 +16,39 @@ const UserDetail = ({ asModal = false, showModal, setShowModal }) => {
 
   useEffect(() => {
     const fetchUserDetail = async () => {
-      try {
-        const res = await userDetailApi.getAllAddress();
-        setUserDetail(res.data);
-      } catch (err) {
-        console.error("Failed to fetch user:", err);
-      } finally {
-        setLoading(false);
+      const maxRetries = 3;
+      const timeoutMs = 5000;
+
+      const withTimeout = (promise, ms) =>
+        Promise.race([
+          promise,
+          new Promise((_, reject) =>
+            setTimeout(() => reject(new Error("timeout")), ms)
+          ),
+        ]);
+
+      for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+          const res = await withTimeout(
+            userDetailApi.getAllAddress(),
+            timeoutMs
+          );
+
+          setUserDetail(res.data);
+          return;
+        } catch (err) {
+          if (attempt === maxRetries) {
+            console.log("Fetch user detail failed:", err.message);
+          } else {
+            await new Promise((r) => setTimeout(r, 300));
+          }
+        } finally {
+          if (attempt === maxRetries) setLoading(false);
+        }
       }
     };
-    fetchUserDetail();
+
+    if (token) fetchUserDetail();
   }, [token, reloadAddress]);
 
   const handleDelete = async (e, itemId) => {
