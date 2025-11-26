@@ -38,7 +38,7 @@ const Login = () => {
     const top = window.screen.height / 2 - height / 2;
 
     window.open(
-      "https://velvetroast.duckdns.org/auth/google/login",
+      "https://api.velvetroast.store/auth/google/login",
       "GoogleLogin",
       `width=${width},height=${height},top=${top},left=${left}`
     );
@@ -46,7 +46,7 @@ const Login = () => {
 
   useEffect(() => {
     const messageListener = (event) => {
-      if (event.origin !== "https://velvetroast.duckdns.org") {
+      if (event.origin !== "https://api.velvetroast.store") {
         return;
       }
       console.log("Received message:", event.data);
