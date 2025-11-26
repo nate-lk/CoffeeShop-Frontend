@@ -24,8 +24,10 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import TopScroll from "./components/layout/TopScroll.jsx";
 import AdBanner from "./components/ad/AdBanner.jsx";
+import useClickGuard from "./utilities/clickGuard.js";
 
 const App = () => {
+  useClickGuard(250);
   const location = useLocation();
   const isUserRoute = location.pathname.startsWith("/user");
 
@@ -41,7 +43,13 @@ const App = () => {
       {location.pathname === "/shop" && <SearchBar />}
 
       {/* Main content grows to fill remaining space */}
-      <main className={isUserRoute ? "flex-1 min-h-[60vh]" : "flex-1 min-h-[60vh] px-4 lg:px-[4vw]"}>
+      <main
+        className={
+          isUserRoute
+            ? "flex-1 min-h-[60vh]"
+            : "flex-1 min-h-[60vh] px-4 lg:px-[4vw]"
+        }
+      >
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
