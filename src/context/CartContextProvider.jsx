@@ -1,7 +1,7 @@
 import { CartContext } from "./CartContext";
 import { useState, useContext, useEffect } from "react";
 import { ShopContext } from "./ShopContext";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { cartApi } from "../../api/cart-api";

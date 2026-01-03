@@ -113,14 +113,7 @@ const Footer = () => {
         <div className="container mx-auto px-6 md:px-20 py-6 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-amber-200/60">
           <p>© 2026 Velvet Roast. All rights reserved.</p>
           <div className="flex items-center gap-6">
-            <span>Design by You</span>
-            <div className="h-3 w-[1px] bg-white/20"></div>
-            <div className="flex gap-2">
-                {/* Simple CSS shapes to represent cards for visual trust */}
-                <div className="w-8 h-5 bg-white/10 rounded-sm"></div>
-                <div className="w-8 h-5 bg-white/10 rounded-sm"></div>
-                <div className="w-8 h-5 bg-white/10 rounded-sm"></div>
-            </div>
+            <span>Design by Velvet Roast</span>
           </div>
         </div>
       </div>

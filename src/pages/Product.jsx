@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 import RelatedProducts from "../components/layout/RelatedProducts";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { CartContext } from "../context/CartContext";
 import { productApi } from "../../api/product-api";
 import { 
@@ -62,7 +62,7 @@ const Product = () => {
     // Enforce stock limit
     if (productData?.stock && value > productData.stock) {
       setQuantity(productData.stock);
-      toast.warn("Số lượng vượt quá tồn kho");
+      toast.warning("Số lượng vượt quá tồn kho");
       return;
     }
 

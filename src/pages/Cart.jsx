@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import Swal from "sweetalert2";
 import { CartContext } from "../context/CartContext";
 import EmptyCart from "../components/layout/EmptyCart";
@@ -119,7 +119,6 @@ const Cart = () => {
 
                 {/* Controls Container */}
                 <div className="flex flex-row sm:flex-col md:flex-row items-center justify-between sm:justify-end gap-6 w-full sm:w-auto mt-2 sm:mt-0">
-                  
                   {/* Quantity Selector (Modern Pill) */}
                   <div className="flex items-center bg-white border border-gray-200 rounded-full shadow-sm px-1 py-1">
                     <button
@@ -167,7 +166,6 @@ const Cart = () => {
           {/* Summary / Actions */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
             <div className="flex flex-col sm:flex-row justify-between items-center gap-6">
-              
               <button
                 onClick={handleClearCart}
                 className="text-gray-500 hover:text-red-600 font-medium text-sm transition-colors flex items-center gap-2"
@@ -178,12 +176,12 @@ const Cart = () => {
 
               <div className="flex flex-col items-end gap-4 w-full sm:w-auto">
                 <div className="flex items-baseline gap-4">
-                    <span className="text-gray-500 text-lg">Tổng cộng:</span>
-                    <span className="text-3xl font-bold text-amber-900">
-                        {totalAmount.toLocaleString()}₫
-                    </span>
+                  <span className="text-gray-500 text-lg">Tổng cộng:</span>
+                  <span className="text-3xl font-bold text-amber-900">
+                    {totalAmount.toLocaleString()}₫
+                  </span>
                 </div>
-                
+
                 <button
                   onClick={() => navigate("/checkout")}
                   className="w-full sm:w-auto bg-[#3e2723] hover:bg-[#5d4037] text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg shadow-amber-900/20 active:scale-[0.98] transition-all flex items-center justify-center gap-3"

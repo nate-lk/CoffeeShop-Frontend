@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../../context/ShopContext";
 import { useNavigate } from "react-router-dom";
 import { orderApi } from "../../../api/order-api";
-import { Eye, Calendar, Package, ChevronLeft, ChevronRight, Filter } from "lucide-react";
+import { Eye, Calendar, Package, ChevronLeft, ChevronRight, ListFilter } from "lucide-react";
 
 const UserOrders = () => {
   const { token, statusFilter, setStatusFilter } = useContext(ShopContext);
@@ -10,21 +10,50 @@ const UserOrders = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);
   const [totalPages, setTotalPages] = useState(1);
-  
-  // We keep the loading state for the modern Skeleton UI, but we will fix the logic below
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
+  // --- 1. RESET FILTERS ON MOUNT ---
+  // Ensures you see all orders when first visiting the page
+  useEffect(() => {
+    setStatusFilter({
+      PAID: false,
+      PENDING_PAYMENT: false,
+      CANCELLED: false,
+      PROCESSING: false,
+      FAILED: false,
+      REFUNDED: false,
+    });
+  }, [setStatusFilter]);
+
+  // --- CONFIGURATION ---
+  const statusConfig = {
+    PAID: { label: "Đã thanh toán", activeClass: "bg-green-100 text-green-800 border-green-300 ring-2 ring-green-500/20" },
+    PENDING_PAYMENT: { label: "Chờ thanh toán", activeClass: "bg-amber-100 text-amber-800 border-amber-300 ring-2 ring-amber-500/20" },
+    CANCELLED: { label: "Đã hủy", activeClass: "bg-red-100 text-red-800 border-red-300 ring-2 ring-red-500/20" },
+    PROCESSING: { label: "Đang xử lý", activeClass: "bg-blue-100 text-blue-800 border-blue-300 ring-2 ring-blue-500/20" },
+    FAILED: { label: "Thất bại", activeClass: "bg-gray-200 text-gray-800 border-gray-400 ring-2 ring-gray-500/20" },
+    REFUNDED: { label: "Đã hoàn tiền", activeClass: "bg-purple-100 text-purple-800 border-purple-300 ring-2 ring-purple-500/20" },
+  };
+
+  // --- LOGIC ---
   const toggleStatus = (status) => {
     setStatusFilter((prev) => ({ ...prev, [status]: !prev[status] }));
   };
 
-  const filteredOrders = orders.filter((o) => statusFilter[o.status]);
+  // Check if ANY filter is currently active
+  const isAnyFilterActive = Object.values(statusFilter).some((isActive) => isActive);
+
+  // IF any button is active -> Show only those. 
+  // IF no buttons active -> Show ALL.
+  const filteredOrders = isAnyFilterActive
+    ? orders.filter((o) => statusFilter[o.status])
+    : orders;
 
   useEffect(() => {
     const fetchOrders = async () => {
-      setLoading(true); // Start loading
+      setLoading(true);
       const maxRetries = 3;
       const timeoutMs = 5000;
 
@@ -47,17 +76,12 @@ const UserOrders = () => {
             setOrders(res.data.orders);
             setTotalPages(res.data.totalPages);
           }
-          
-          // --- FIX IS HERE ---
-          // Turn off loading immediately after success, BEFORE returning
-          setLoading(false); 
-          return; 
-          // -------------------
-
+          setLoading(false);
+          return;
         } catch (err) {
           if (attempt === maxRetries) {
             console.log("Fetch orders failed:", err.message);
-            setLoading(false); // Turn off loading if all retries fail
+            setLoading(false);
           } else {
             await new Promise((r) => setTimeout(r, 300));
           }
@@ -78,62 +102,75 @@ const UserOrders = () => {
       day: "2-digit",
     });
 
-  const statusConfig = {
-    PAID: { label: "Đã thanh toán", color: "bg-green-100 text-green-700 border-green-200" },
-    PENDING_PAYMENT: { label: "Chờ thanh toán", color: "bg-amber-100 text-amber-700 border-amber-200" },
-    CANCELLED: { label: "Đã hủy", color: "bg-red-50 text-red-600 border-red-100" },
-    PROCESSING: { label: "Đang xử lý", color: "bg-blue-50 text-blue-600 border-blue-100" },
-    FAILED: { label: "Thất bại", color: "bg-gray-100 text-gray-600 border-gray-200" },
-    REFUNDED: { label: "Đã hoàn tiền", color: "bg-purple-50 text-purple-600 border-purple-100" },
-  };
-
   return (
-    <div className="w-full max-w-5xl mx-auto">
+    <div className="w-full max-w-5xl mx-auto p-4 sm:p-6">
       {/* Header */}
       <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
            <h2 className="text-2xl font-bold text-gray-800">Lịch sử đơn hàng</h2>
-           <p className="text-gray-500 text-sm mt-1">Theo dõi và quản lý các đơn hàng của bạn.</p>
+           <p className="text-gray-500 text-sm mt-1">
+             {isAnyFilterActive 
+                ? `Đang hiển thị ${filteredOrders.length} đơn hàng theo bộ lọc.`
+                : "Hiển thị tất cả đơn hàng của bạn."}
+           </p>
         </div>
       </div>
 
-      {/* Filters */}
+      {/* Filters (Scrollable Tabs) */}
       <div className="mb-8 overflow-x-auto pb-2 scrollbar-hide">
-        <div className="flex items-center gap-2 min-w-max">
-          <div className="flex items-center gap-2 px-3 py-1.5 text-gray-500 text-sm font-medium">
-             <Filter size={16} /> Lọc theo:
+        <div className="flex items-center gap-3 min-w-max">
+          <div className="flex items-center gap-2 px-3 py-1.5 text-gray-500 text-sm font-bold uppercase tracking-wide">
+             <ListFilter size={16} /> Bộ lọc:
           </div>
-          {Object.keys(statusFilter).map((status) => {
+          
+          {Object.keys(statusConfig).map((status) => {
             const isActive = statusFilter[status];
-            const config = statusConfig[status] || { label: status, color: "bg-gray-100 text-gray-600" };
+            const config = statusConfig[status];
 
             return (
               <button
                 key={status}
                 onClick={() => toggleStatus(status)}
-                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 border ${
-                  isActive
-                    ? "bg-gray-800 text-white border-gray-800 shadow-md"
-                    : "bg-white text-gray-600 border-gray-200 hover:border-gray-300 hover:bg-gray-50"
-                }`}
+                className={`
+                  relative px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wide transition-all duration-200 border
+                  ${isActive 
+                    ? `${config.activeClass} shadow-sm z-10 scale-105` 
+                    : "bg-white text-gray-400 border-gray-200 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-600"
+                  }
+                `}
               >
                 {config.label}
+                {isActive && (
+                   <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-current rounded-full border-2 border-white"></span>
+                )}
               </button>
             );
           })}
+
+          {isAnyFilterActive && (
+            <button 
+              onClick={() => setStatusFilter({})}
+              className="text-xs text-red-500 hover:text-red-700 font-medium underline ml-2 transition-colors"
+            >
+              Xóa bộ lọc
+            </button>
+          )}
         </div>
       </div>
 
       {/* Orders List */}
       <div className="space-y-4">
         {loading ? (
-            // Skeleton Loader (Modern loading effect)
+            // Skeleton Loader
             [1,2,3].map(i => (
                 <div key={i} className="h-40 bg-gray-100 rounded-xl animate-pulse"></div>
             ))
         ) : filteredOrders.length > 0 ? (
           filteredOrders.map((order) => {
-             const statusStyle = statusConfig[order.status] || statusConfig.FAILED;
+             // For the badge inside the card, we want it styled regardless of filter state
+             const config = statusConfig[order.status] || statusConfig.FAILED;
+             // Strip the "ring" classes for the badge to keep it cleaner inside the card
+             const badgeColor = config.activeClass.split(" ring")[0]; 
 
              return (
               <div
@@ -145,8 +182,8 @@ const UserOrders = () => {
                   <div className="flex flex-col gap-1">
                      <div className="flex items-center gap-3">
                         <span className="font-bold text-gray-900 text-lg">#{order.orderId.slice(0, 8).toUpperCase()}...</span>
-                        <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wide border ${statusStyle.color}`}>
-                           {statusStyle.label}
+                        <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wide border ${badgeColor}`}>
+                           {config.label}
                         </span>
                      </div>
                      <div className="flex items-center gap-2 text-xs text-gray-500 font-medium">
@@ -216,16 +253,20 @@ const UserOrders = () => {
              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-gray-300 shadow-sm mb-4">
                 <Package size={32} />
              </div>
-             <p className="text-gray-900 font-medium text-lg">Chưa có đơn hàng nào</p>
+             <p className="text-gray-900 font-medium text-lg">
+                {isAnyFilterActive ? "Không tìm thấy đơn hàng phù hợp" : "Bạn chưa có đơn hàng nào"}
+             </p>
              <p className="text-gray-500 text-sm mt-1 text-center max-w-xs">
-                Bạn chưa thực hiện đơn hàng nào với bộ lọc này. Hãy thử thay đổi bộ lọc hoặc đặt hàng mới.
+                {isAnyFilterActive 
+                  ? "Hãy thử bỏ chọn bộ lọc để xem tất cả đơn hàng."
+                  : "Hãy dạo quanh cửa hàng và chọn những món đồ ưng ý nhé!"}
              </p>
           </div>
         )}
       </div>
 
       {/* Footer / Pagination */}
-      {filteredOrders.length > 0 && (
+      {orders.length > 0 && (
           <div className="mt-8 flex items-center justify-between border-t border-gray-100 pt-6">
             <div className="flex items-center gap-2">
                 <span className="text-sm text-gray-500 hidden sm:inline">Hiển thị</span>
@@ -248,7 +289,7 @@ const UserOrders = () => {
                <button 
                   onClick={() => setPage(p => Math.max(1, p - 1))}
                   disabled={page === 1}
-                  className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-gray-600 transition-colors"
+                  className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-gray-600"
                >
                   <ChevronLeft size={18} />
                </button>
@@ -258,7 +299,7 @@ const UserOrders = () => {
                <button 
                   onClick={() => setPage(p => Math.min(totalPages, p + 1))}
                   disabled={page === totalPages}
-                  className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-gray-600 transition-colors"
+                  className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-gray-600"
                >
                   <ChevronRight size={18} />
                </button>

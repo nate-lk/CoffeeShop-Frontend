@@ -20,8 +20,7 @@ import {
 import Navbar from "./components/layout/Navbar.jsx";
 import Footer from "./components/layout/Footer.jsx";
 import SearchBar from "./components/layout/SearchBar.jsx";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { Toaster } from "sonner";
 import TopScroll from "./components/layout/TopScroll.jsx";
 // import AdBanner from "./components/ad/AdBanner.jsx";
 import useClickGuard from "./utilities/clickGuard.js";
@@ -33,13 +32,16 @@ const App = () => {
   const isUserRoute = location.pathname.startsWith("/user");
 
   return (
-
     <div className="flex flex-col min-h-screen pt-20 sm:pt-24">
-      
-      <ToastContainer position="top-left" autoClose={1500} />
+      <Toaster
+        position="top-center" // or "bottom-right"
+        richColors // Makes success green, error red automatically
+        expand={true} // Allows hovering to see all toasts
+        closeButton // Adds a small X to close
+      />
 
       <Navbar />
-      
+
       {/* <AdBanner /> */}
       <TopScroll />
 

@@ -107,7 +107,7 @@ const Collection = () => {
       {/* Top Header & Sort Options */}
       <div className="flex flex-col sm:flex-row justify-between items-end sm:items-center mb-8 gap-4">
         <div className="flex items-center gap-4">
-          <Title text1="TẤT CẢ" text2="SẢN PHẨM" />
+          <Title text1="TẤT CẢ " text2="SẢN PHẨM" />
           {/* Mobile Filter Toggle */}
           <button
             onClick={() => setShowFilter(!showFilter)}
