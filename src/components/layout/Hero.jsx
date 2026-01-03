@@ -1,10 +1,13 @@
 import React from "react";
-import { assets } from "../../assets/assets";
+// import { assets } from "../../assets/assets"; // You can remove this if you aren't using the image anymore
 import { Link } from "react-router-dom";
 
 const Hero = () => {
+  // Replace this ID with your actual YouTube Video ID
+  const YOUTUBE_VIDEO_ID = "lGmb-eAyaeE"; // Example Coffee B-roll ID
+
   return (
-    <div className="flex flex-col sm:flex-row items-center bg-gradient-to-r from-amber-50 to-amber-100  overflow-hidden shadow-md my-6">
+    <div className="flex flex-col sm:flex-row items-center bg-gradient-to-r from-amber-50 to-amber-100 overflow-hidden shadow-md my-6">
       {/* Left Section */}
       <div className="w-full sm:w-1/2 flex flex-col justify-center items-start px-8 sm:px-12 py-10 text-[#2f2f2f]">
         <div className="flex items-center gap-2 mb-3">
@@ -27,19 +30,24 @@ const Hero = () => {
 
         <Link
           to="/shop"
-          className="bg-amber-700 text-white font-medium px-6 py-3  hover:bg-amber-800 transition-colors duration-300"
+          className="bg-amber-700 text-white font-medium px-6 py-3 hover:bg-amber-800 transition-colors duration-300"
         >
           Mua Ngay
         </Link>
       </div>
 
-      {/* Right Section */}
-      <div className="w-full sm:w-1/2 h-full">
-        <img
-          src={assets.hero_img}
-          alt="Velvet Roast Hero"
-          className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-        />
+      {/* Right Section - YouTube Embed */}
+      <div className="w-full sm:w-1/2 flex items-center justify-center p-4 sm:p-0">
+        {/* Aspect Ratio Container */}
+        <div className="relative w-full aspect-video shadow-xl sm:rounded-l-lg overflow-hidden border-4 border-white/50">
+          <iframe
+            className="w-full h-full object-cover"
+            src={`https://www.youtube.com/embed/${YOUTUBE_VIDEO_ID}?rel=0&modestbranding=1`}
+            title="Velvet Roast Video"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          ></iframe>
+        </div>
       </div>
     </div>
   );
