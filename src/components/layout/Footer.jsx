@@ -39,13 +39,13 @@ const Footer = () => {
               Mỗi tách cà phê là một câu chuyện. Sứ mệnh của chúng tôi là mang lại sự ấm áp và kết nối trong từng giọt cà phê rang xay thủ công.
             </p>
             {/* Social Icons */}
-            <div className="flex gap-4 pt-2">
+            {/* <div className="flex gap-4 pt-2">
               {[Facebook, Instagram, Twitter].map((Icon, idx) => (
                 <a key={idx} href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-amber-700 hover:text-white transition-all duration-300 text-amber-200">
                   <Icon size={20} />
                 </a>
               ))}
-            </div>
+            </div> */}
           </div>
 
           {/* Column 2: Quick Links */}
@@ -56,7 +56,7 @@ const Footer = () => {
                 { name: "Trang chủ", path: "/" },
                 { name: "Cửa hàng", path: "/shop" },
                 { name: "Về chúng tôi", path: "/about" },
-                { name: "Blog cà phê", path: "/blog" },
+                // { name: "Blog cà phê", path: "/blog" },
               ].map((link) => (
                 <li key={link.name}>
                   <Link to={link.path} className="hover:text-amber-400 hover:pl-2 transition-all duration-300 inline-block">
@@ -72,7 +72,7 @@ const Footer = () => {
             <h4 className="text-lg font-serif font-semibold text-amber-300 mb-6">Chính Sách</h4>
             <ul className="space-y-3 text-sm text-amber-100/80">
               {[
-                { name: "Giao hàng & Vận chuyển", path: "/delivery" },
+                // { name: "Giao hàng & Vận chuyển", path: "/delivery" },
                 { name: "Đổi trả hàng", path: "/policy" },
                 { name: "Bảo mật thông tin", path: "/privacy" },
                 { name: "Điều khoản sử dụng", path: "/terms" },
