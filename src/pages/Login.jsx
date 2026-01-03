@@ -3,11 +3,12 @@ import { ShopContext } from "../context/ShopContext";
 import { toast } from "sonner";
 import { useNavigate, Link } from "react-router-dom";
 import { userApi } from "../../api/user-api";
-import { Mail, Lock, ArrowRight, LogIn } from "lucide-react";
+import { Mail, Lock, ArrowRight, LogIn, Eye, EyeOff } from "lucide-react";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const { setToken } = useContext(ShopContext);
   const navigate = useNavigate();
 
@@ -106,7 +107,6 @@ const Login = () => {
                 <label className="text-sm font-semibold text-gray-700">
                   Mật khẩu
                 </label>
-                {/* --- ADDED FORGOT PASSWORD LINK HERE --- */}
                 <Link 
                   to="/forgot-password" 
                   className="text-sm font-medium text-amber-600 hover:text-amber-800 hover:underline transition-colors"
@@ -122,11 +122,19 @@ const Login = () => {
                 <input
                   onChange={(e) => setPassword(e.target.value)}
                   value={password}
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
-                  className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:bg-white focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 transition-all"
+                  // Added pr-12 to prevent text overlapping with the eye icon
+                  className="w-full pl-12 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:bg-white focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 transition-all"
                   required
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer transition-colors"
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
               </div>
             </div>
 
