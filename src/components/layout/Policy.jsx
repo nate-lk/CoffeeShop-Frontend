@@ -1,51 +1,62 @@
 import React from "react";
-import { assets } from "../../assets/assets";
+import { Truck, ShieldCheck, Headset, ArrowRightLeft } from "lucide-react";
 
 const Policy = () => {
   const policies = [
     {
-      icon: assets.exchange_icon,
-      title: "Chính Sách Đổi Trả",
-      desc: "Đổi trả dễ dàng trong 7 ngày",
+      icon: ArrowRightLeft,
+      title: "Đổi trả dễ dàng",
+      desc: "Đổi trả miễn phí trong vòng 7 ngày",
     },
     {
-      icon: assets.quality_icon,
-      title: "Chất Lượng Đảm Bảo",
-      desc: "Cam kết sản phẩm chính hãng",
+      icon: ShieldCheck,
+      title: "Chất lượng đảm bảo",
+      desc: "Cam kết sản phẩm chính hãng 100%",
     },
     {
-      icon: assets.support_img,
-      title: "Hỗ Trợ 24/7",
-      desc: "Đội ngũ tận tâm và chuyên nghiệp",
+      icon: Headset,
+      title: "Hỗ trợ 24/7",
+      desc: "Đội ngũ tư vấn tận tâm, chuyên nghiệp",
     },
     {
-      icon: assets.delivery_icon || assets.exchange_icon, // fallback
-      title: "Giao Hàng Nhanh Chóng",
-      desc: "Miễn phí vận chuyển đơn trên 500k",
+      icon: Truck,
+      title: "Giao hàng nhanh",
+      desc: "Vận chuyển hỏa tốc, miễn phí đơn >500k",
     },
   ];
 
   return (
-    <div className="bg-amber-50 py-16 px-6 sm:px-10  shadow-inner my-10">
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-10 text-center text-gray-700">
-        {policies.map((policy, index) => (
-          <div
-            key={index}
-            className="flex flex-col items-center bg-white   shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 p-6"
-          >
-            <img
-              src={policy.icon}
-              className="w-14 h-14 mb-4 object-contain"
-              alt={policy.title}
-            />
-            <p className="font-semibold text-amber-800 mb-1">
-              {policy.title}
-            </p>
-            <p className="text-gray-500 text-sm">{policy.desc}</p>
-          </div>
-        ))}
+    <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+      <div className="container mx-auto max-w-7xl">
+        
+        {/* Optional Section Title - helps with spacing */}
+        {/* <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900">Tại sao chọn Velvet Roast?</h2>
+        </div> */}
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          {policies.map((policy, index) => (
+            <div
+              key={index}
+              className="group flex flex-col items-center text-center p-8 rounded-2xl border border-gray-100 bg-white hover:border-amber-200 hover:shadow-xl hover:shadow-amber-900/5 transition-all duration-300"
+            >
+              {/* Icon Container */}
+              <div className="w-16 h-16 rounded-full bg-amber-50 flex items-center justify-center text-amber-700 mb-6 group-hover:scale-110 group-hover:bg-amber-100 transition-all duration-300">
+                <policy.icon size={32} strokeWidth={1.5} />
+              </div>
+
+              {/* Text Content */}
+              <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-amber-800 transition-colors">
+                {policy.title}
+              </h3>
+              <p className="text-sm text-gray-500 leading-relaxed max-w-[200px]">
+                {policy.desc}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 
