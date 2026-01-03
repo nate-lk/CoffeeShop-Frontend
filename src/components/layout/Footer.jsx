@@ -8,7 +8,7 @@ const Footer = () => {
       <div className="flex flex-col sm:grid grid-cols-[3fr_1fr_1fr] gap-14 px-6 md:px-20 py-12 text-sm">
         {/* Logo and description */}
         <div>
-          <img src={assets.logo} className="mb-5 w-32" alt="Coffee Shop Logo" />
+          <img src={assets.company} className="mb-5 w-32" alt="Coffee Shop Logo" />
           <p className="w-full md:w-2/3 text-amber-100 leading-relaxed">
             Tại <span className="font-semibold">Velvet Roast</span>, chúng tôi
             tin rằng mỗi tách cà phê đều kể một câu chuyện. Từ những hạt cà phê
