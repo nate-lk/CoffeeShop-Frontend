@@ -34,10 +34,11 @@ const App = () => {
   return (
     <div className="flex flex-col min-h-screen pt-20 sm:pt-24">
       <Toaster
-        position="top-center" // or "bottom-right"
-        richColors // Makes success green, error red automatically
-        expand={true} // Allows hovering to see all toasts
-        closeButton // Adds a small X to close
+        position="top-center"
+        richColors
+        expand={true}
+        closeButton
+        duration={1500} // 1.5 seconds
       />
 
       <Navbar />
