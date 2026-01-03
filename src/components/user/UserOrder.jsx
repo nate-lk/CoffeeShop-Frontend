@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../../context/ShopContext";
 import { useNavigate } from "react-router-dom";
 import { orderApi } from "../../../api/order-api";
-import { Eye } from "lucide-react";
+import { Eye, Calendar, Package, ChevronLeft, ChevronRight, Filter } from "lucide-react";
 
 const UserOrders = () => {
   const { token, statusFilter, setStatusFilter } = useContext(ShopContext);
@@ -10,16 +10,21 @@ const UserOrders = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);
   const [totalPages, setTotalPages] = useState(1);
+  
+  // We keep the loading state for the modern Skeleton UI, but we will fix the logic below
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
   const toggleStatus = (status) => {
     setStatusFilter((prev) => ({ ...prev, [status]: !prev[status] }));
   };
+
   const filteredOrders = orders.filter((o) => statusFilter[o.status]);
 
   useEffect(() => {
     const fetchOrders = async () => {
+      setLoading(true); // Start loading
       const maxRetries = 3;
       const timeoutMs = 5000;
 
@@ -42,10 +47,17 @@ const UserOrders = () => {
             setOrders(res.data.orders);
             setTotalPages(res.data.totalPages);
           }
-          return;
+          
+          // --- FIX IS HERE ---
+          // Turn off loading immediately after success, BEFORE returning
+          setLoading(false); 
+          return; 
+          // -------------------
+
         } catch (err) {
           if (attempt === maxRetries) {
             console.log("Fetch orders failed:", err.message);
+            setLoading(false); // Turn off loading if all retries fail
           } else {
             await new Promise((r) => setTimeout(r, 300));
           }
@@ -60,187 +72,199 @@ const UserOrders = () => {
     value.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
 
   const formatDate = (date) =>
-    new Date(date).toLocaleString("vi-VN", {
+    new Date(date).toLocaleDateString("vi-VN", {
       year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
+      month: "2-digit",
+      day: "2-digit",
     });
 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case "PAID":
-        return "bg-green-100 text-green-800";
-      case "PENDING_PAYMENT":
-        return "bg-yellow-100 text-yellow-800";
-      case "CANCELLED":
-        return "bg-red-100 text-red-800";
-      case "PROCESSING":
-        return "bg-blue-100 text-blue-800";
-      case "FAILED":
-        return "bg-black-100 text-white-800";
-      case "REFUNDED":
-        return "bg-purple-100 text-white-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
-
-  const statusNamesVN = {
-    PAID: "ĐÃ THANH TOÁN",
-    PENDING_PAYMENT: "CHỜ THANH TOÁN",
-    CANCELLED: "ĐÃ HỦY",
-    PROCESSING: "ĐANG XỬ LÝ",
-    FAILED: "THẤT BẠI",
-    REFUNDED: "ĐÃ HOÀN TIỀN",
+  const statusConfig = {
+    PAID: { label: "Đã thanh toán", color: "bg-green-100 text-green-700 border-green-200" },
+    PENDING_PAYMENT: { label: "Chờ thanh toán", color: "bg-amber-100 text-amber-700 border-amber-200" },
+    CANCELLED: { label: "Đã hủy", color: "bg-red-50 text-red-600 border-red-100" },
+    PROCESSING: { label: "Đang xử lý", color: "bg-blue-50 text-blue-600 border-blue-100" },
+    FAILED: { label: "Thất bại", color: "bg-gray-100 text-gray-600 border-gray-200" },
+    REFUNDED: { label: "Đã hoàn tiền", color: "bg-purple-50 text-purple-600 border-purple-100" },
   };
 
   return (
-    <div className="w-[100%] mx-auto p-8   shadow-inner border border-[#d7ccc8] mt-10">
-      <h2 className="text-2xl font-semibold mb-6 text-[#3e2723]">
-        Đơn hàng của bạn
-      </h2>
-
-      <div className="flex flex-wrap gap-2 mb-4">
-        {Object.keys(statusFilter).map((status) => {
-          const active = statusFilter[status];
-
-          return (
-            <button
-              key={status}
-              onClick={() => toggleStatus(status)}
-              className={`px-3 py-1 text-xs border transition
-          ${
-            active
-              ? "bg-[#3e2723] text-white border-[#3e2723]"
-              : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
-          }`}
-            >
-              {statusNamesVN[status] || status.replace("_", " ")}
-            </button>
-          );
-        })}
+    <div className="w-full max-w-5xl mx-auto">
+      {/* Header */}
+      <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+           <h2 className="text-2xl font-bold text-gray-800">Lịch sử đơn hàng</h2>
+           <p className="text-gray-500 text-sm mt-1">Theo dõi và quản lý các đơn hàng của bạn.</p>
+        </div>
       </div>
 
-      <div className="mb-4 flex items-center gap-2">
-        <span className="text-sm text-gray-600">Hiển thị:</span>
-        <select
-          className="border px-2 py-1 text-sm"
-          value={limit}
-          onChange={(e) => {
-            setLimit(Number(e.target.value));
-            setPage(1);
-          }}
-        >
-          <option value={20}>20</option>
-          <option value={50}>50</option>
-          <option value={100}>100</option>
-        </select>
-        <span className="text-sm text-gray-600">mỗi trang</span>
-      </div>
+      {/* Filters */}
+      <div className="mb-8 overflow-x-auto pb-2 scrollbar-hide">
+        <div className="flex items-center gap-2 min-w-max">
+          <div className="flex items-center gap-2 px-3 py-1.5 text-gray-500 text-sm font-medium">
+             <Filter size={16} /> Lọc theo:
+          </div>
+          {Object.keys(statusFilter).map((status) => {
+            const isActive = statusFilter[status];
+            const config = statusConfig[status] || { label: status, color: "bg-gray-100 text-gray-600" };
 
-      <div className="overflow-x-auto  ">
-        <table className="min-w-full text-sm border-collapse">
-          <thead className="bg-gray-100 text-[#4e342e] uppercase text-xs border-b border-[#d7ccc8]">
-            <tr>
-              <th className="px-4 py-3 text-left">#</th>
-              <th className="px-4 py-3 text-left">Mã đơn</th>
-              <th className="px-4 py-3 text-left">Sản phẩm</th>
-              <th className="px-4 py-3 text-left">Tổng cộng</th>
-              <th className="px-4 py-3 text-left">Trạng thái</th>
-              <th className="px-4 py-3 text-left">Ngày tạo</th>
-              <th className="px-4 py-3 text-right">Thao tác</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {[...filteredOrders].map((order, index) => (
-              <tr
-                key={order.orderId}
-                className="border-b border-[#e0d6d1] hover:bg-[#fff8f0] transition"
+            return (
+              <button
+                key={status}
+                onClick={() => toggleStatus(status)}
+                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200 border ${
+                  isActive
+                    ? "bg-gray-800 text-white border-gray-800 shadow-md"
+                    : "bg-white text-gray-600 border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                }`}
               >
-                <td className="px-4 py-3 text-[#5d4037]">{index + 1}</td>
-                <td className="px-4 py-3 font-mono text-xs text-[#4e342e]">
-                  {order.orderId.slice(0, 10)}...
-                </td>
-                <td className="px-4 py-3 text-[#3e2723]">
-                  {order.items
-                    .map((item) => item.name)
-                    .slice(0, 2)
-                    .join(", ")}
-                  {order.items.length > 2 && (
-                    <span className="text-[#8d6e63]">
-                      {" "}
-                      +{order.items.length - 2} sản phẩm
-                    </span>
-                  )}
-                </td>
-                <td className="px-4 py-3 font-medium text-[#3e2723]">
-                  {formatCurrency(order.total)}
-                </td>
-                <td className="px-4 py-3">
-                  <span
-                    className={`px-2 py-1 text-xs font-semibold ${getStatusColor(
-                      order.status
-                    )}`}
-                  >
-                    {order.status === "PENDING_PAYMENT"
-                      ? "CHỜ THANH TOÁN"
-                      : order.status === "PAID"
-                      ? "ĐÃ THANH TOÁN"
-                      : order.status === "CANCELLED"
-                      ? "ĐÃ HỦY"
-                      : order.status === "PROCESSING"
-                      ? "ĐANG XỬ LÝ"
-                      : order.status}
-                  </span>
-                </td>
-                <td className="px-4 py-3 text-[#5d4037]">
-                  {formatDate(order.createdAt)}
-                </td>
-                <td className="px-4 py-3 text-right">
-                  <button
-                    onClick={() => navigate(`/orders/${order.orderId}`)}
-                    className="px-3 py-1 text-xs bg-[#3e2723] hover:bg-[#4e342e] text-white transition"
-                  >
-                    <Eye size={16} />
-                  </button>
-                </td>
-              </tr>
-            ))}
+                {config.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
 
-            {orders.length === 0 && (
-              <tr>
-                <td
-                  colSpan="7"
-                  className="text-center py-6 text-[#5d4037] italic bg-[#fff8f0]"
+      {/* Orders List */}
+      <div className="space-y-4">
+        {loading ? (
+            // Skeleton Loader (Modern loading effect)
+            [1,2,3].map(i => (
+                <div key={i} className="h-40 bg-gray-100 rounded-xl animate-pulse"></div>
+            ))
+        ) : filteredOrders.length > 0 ? (
+          filteredOrders.map((order) => {
+             const statusStyle = statusConfig[order.status] || statusConfig.FAILED;
+
+             return (
+              <div
+                key={order.orderId}
+                className="group bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md hover:border-amber-200 transition-all duration-200 overflow-hidden"
+              >
+                {/* Order Header */}
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 sm:p-5 border-b border-gray-100 bg-gray-50/50">
+                  <div className="flex flex-col gap-1">
+                     <div className="flex items-center gap-3">
+                        <span className="font-bold text-gray-900 text-lg">#{order.orderId.slice(0, 8).toUpperCase()}...</span>
+                        <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wide border ${statusStyle.color}`}>
+                           {statusStyle.label}
+                        </span>
+                     </div>
+                     <div className="flex items-center gap-2 text-xs text-gray-500 font-medium">
+                        <Calendar size={14} />
+                        {formatDate(order.createdAt)}
+                     </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 self-end sm:self-auto">
+                     <button 
+                        onClick={() => navigate(`/orders/${order.orderId}`)}
+                        className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-amber-700 hover:border-amber-200 transition-colors shadow-sm"
+                     >
+                        <Eye size={16} />
+                        Xem chi tiết
+                     </button>
+                  </div>
+                </div>
+
+                {/* Order Body */}
+                <div className="p-4 sm:p-5">
+                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                      
+                      {/* Product Preview */}
+                      <div className="flex-1">
+                         <div className="flex items-center gap-4">
+                            {/* Thumbnails (Max 3) */}
+                            <div className="flex -space-x-3">
+                               {order.items.slice(0, 3).map((item, idx) => (
+                                  <div key={idx} className="w-12 h-12 rounded-lg border-2 border-white bg-gray-100 overflow-hidden relative shadow-sm">
+                                     <img src={item.image?.[0]} alt="" className="w-full h-full object-cover" />
+                                  </div>
+                               ))}
+                               {order.items.length > 3 && (
+                                  <div className="w-12 h-12 rounded-lg border-2 border-white bg-gray-100 flex items-center justify-center text-xs font-bold text-gray-500 shadow-sm relative z-10">
+                                     +{order.items.length - 3}
+                                  </div>
+                               )}
+                            </div>
+                            
+                            {/* Text Summary */}
+                            <div className="flex flex-col">
+                               <span className="text-sm font-medium text-gray-900 line-clamp-1">
+                                  {order.items[0].name} {order.items.length > 1 && `& ${order.items.length - 1} sản phẩm khác`}
+                               </span>
+                               <span className="text-xs text-gray-500">
+                                  Tổng số lượng: {order.items.reduce((acc, item) => acc + item.quantity, 0)}
+                               </span>
+                            </div>
+                         </div>
+                      </div>
+
+                      {/* Total Price */}
+                      <div className="text-right sm:text-right border-t sm:border-t-0 border-gray-100 pt-3 sm:pt-0 mt-3 sm:mt-0">
+                         <span className="text-xs text-gray-500 block mb-1">Tổng tiền</span>
+                         <span className="text-xl font-bold text-amber-700">
+                            {formatCurrency(order.total)}
+                         </span>
+                      </div>
+                   </div>
+                </div>
+              </div>
+            );
+          })
+        ) : (
+          <div className="flex flex-col items-center justify-center py-16 px-4 bg-gray-50 rounded-xl border border-dashed border-gray-200">
+             <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-gray-300 shadow-sm mb-4">
+                <Package size={32} />
+             </div>
+             <p className="text-gray-900 font-medium text-lg">Chưa có đơn hàng nào</p>
+             <p className="text-gray-500 text-sm mt-1 text-center max-w-xs">
+                Bạn chưa thực hiện đơn hàng nào với bộ lọc này. Hãy thử thay đổi bộ lọc hoặc đặt hàng mới.
+             </p>
+          </div>
+        )}
+      </div>
+
+      {/* Footer / Pagination */}
+      {filteredOrders.length > 0 && (
+          <div className="mt-8 flex items-center justify-between border-t border-gray-100 pt-6">
+            <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-500 hidden sm:inline">Hiển thị</span>
+                <select
+                  className="bg-gray-50 border border-gray-200 text-gray-700 text-sm rounded-lg focus:ring-amber-500 focus:border-amber-500 block p-2"
+                  value={limit}
+                  onChange={(e) => {
+                    setLimit(Number(e.target.value));
+                    setPage(1);
+                  }}
                 >
-                  Bạn chưa có đơn hàng nào.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+                  <option value={10}>10</option>
+                  <option value={20}>20</option>
+                  <option value={50}>50</option>
+                </select>
+                <span className="text-sm text-gray-500 hidden sm:inline">đơn / trang</span>
+            </div>
 
-      <div className="flex items-center gap-2 mt-4">
-        <span className="text-sm text-gray-600">Trang:</span>
-
-        <select
-          className="border px-2 py-1 text-sm"
-          value={page}
-          onChange={(e) => setPage(Number(e.target.value))}
-        >
-          {Array.from({ length: totalPages }, (_, i) => (
-            <option key={i + 1} value={i + 1}>
-              {i + 1}
-            </option>
-          ))}
-        </select>
-
-        <span className="text-sm text-gray-600">/ {totalPages}</span>
-      </div>
+            <div className="flex items-center gap-2">
+               <button 
+                  onClick={() => setPage(p => Math.max(1, p - 1))}
+                  disabled={page === 1}
+                  className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-gray-600 transition-colors"
+               >
+                  <ChevronLeft size={18} />
+               </button>
+               <span className="text-sm font-medium text-gray-700 px-2">
+                  Trang {page} / {totalPages}
+               </span>
+               <button 
+                  onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                  disabled={page === totalPages}
+                  className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-gray-600 transition-colors"
+               >
+                  <ChevronRight size={18} />
+               </button>
+            </div>
+          </div>
+      )}
     </div>
   );
 };

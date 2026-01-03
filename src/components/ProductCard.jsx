@@ -7,27 +7,31 @@ import {
 
 const ProductCard = ({ product }) => {
   return (
-    <Card className="w-44 sm:w-48 sm:h-[300px] h-[280px] flex flex-col overflow-hidden border border-gray-300 shadow-sm hover:shadow-md transition-all duration-300 rounded-none">
+    <Card className="group w-full h-full flex flex-col overflow-hidden border border-gray-100 bg-white rounded-xl shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+      
       {/* Image Section */}
-      <CardHeader className="p-0 bg-white flex items-center justify-center h-80 overflow-hidden">
+      {/* Changed fixed height to aspect-ratio for better responsiveness */}
+      <CardHeader className="p-0 bg-gray-50 relative aspect-square sm:aspect-[4/5] overflow-hidden">
         <img
           src={product.image[0]}
           alt={product.name}
-          className="object-contain max-w-full max-h-full mx-auto"
+          className="object-contain w-full h-full p-4 transition-transform duration-500 ease-in-out group-hover:scale-110"
         />
       </CardHeader>
 
       {/* Content Section */}
-      <CardContent className="flex flex-col justify-between p-4 flex-1">
+      <CardContent className="flex flex-col flex-1 p-3 sm:p-4 gap-2">
         {/* Title */}
-        <CardTitle className="text-l font-bold text-gray-900 leading-tight line-clamp-2 h-[52px]">
+        <CardTitle className="text-sm sm:text-base font-medium text-gray-700 leading-snug line-clamp-2 min-h-[2.5rem] group-hover:text-amber-700 transition-colors">
           {product.name}
         </CardTitle>
 
         {/* Price */}
-        <p className="text-amber-700 font-extrabold text-l h-[32px] leading-none flex items-center tracking-tight">
-          {product.price.toLocaleString()}₫
-        </p>
+        <div className="mt-auto pt-2 flex items-center justify-between">
+          <p className="text-gray-900 font-bold text-base sm:text-lg tracking-tight">
+            {product.price.toLocaleString()}₫
+          </p>
+        </div>
       </CardContent>
     </Card>
   );

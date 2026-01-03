@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 import { orderApi } from "../../api/order-api";
+import { CheckCircle, Calendar, CreditCard, Package, ArrowRight, Home, Loader2 } from "lucide-react";
 
 const PlaceOrder = () => {
   const { orderId } = useParams();
@@ -25,85 +26,158 @@ const PlaceOrder = () => {
 
   if (loading)
     return (
-      <div className="p-8 text-center text-[#5d4037]">Đang tải đơn hàng...</div>
+      <div className="min-h-[60vh] flex flex-col items-center justify-center text-amber-800 gap-3">
+        <Loader2 className="w-10 h-10 animate-spin" />
+        <p className="font-medium">Đang tải đơn hàng...</p>
+      </div>
     );
+
   if (!order)
     return (
-      <div className="p-8 text-center text-red-600">
-        Không tìm thấy đơn hàng.
+      <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4">
+        <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center text-red-500">
+           <Package size={32} />
+        </div>
+        <h2 className="text-xl font-bold text-gray-800">Không tìm thấy đơn hàng</h2>
+        <Link to="/" className="text-amber-700 hover:underline">Quay về trang chủ</Link>
       </div>
     );
 
   return (
-    <div className="max-w-4xl mx-auto p-8">
-      <h1 className="text-2xl font-semibold mb-4 text-center text-[#4e342e]">
-        ✅ Đặt hàng thành công!
-      </h1>
+    <div className="min-h-screen bg-gray-50/50 py-12 px-4 sm:px-6">
+      <div className="max-w-3xl mx-auto">
+        
+        {/* --- SUCCESS HEADER --- */}
+        <div className="text-center mb-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full text-green-600 mb-6 shadow-sm ring-8 ring-green-50">
+            <CheckCircle size={40} strokeWidth={3} />
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
+            Đặt hàng thành công!
+          </h1>
+          <p className="text-gray-500 text-lg">
+            Cảm ơn bạn đã mua sắm tại Velvet Roast.
+          </p>
+        </div>
 
-      <div className="bg-[#f8f3ef] border border-[#d7ccc8]   shadow-inner p-6 space-y-6 text-[#3e2723]">
-        <section>
-          <h2 className="text-lg font-medium border-b border-[#d7ccc8] pb-2 mb-2 text-[#4e342e]">
-            Mã đơn hàng: {order.orderId}
-          </h2>
-          <p className="text-sm text-[#6d4c41]">
-            Ngày tạo: {new Date(order.createdAt).toLocaleString()}
-          </p>
-          <p className="text-sm font-medium">
-            Trạng thái: <span className="text-[#6d4c41]">{order.status}</span>
-          </p>
-          <p className="text-sm font-medium">
-            Phương thức thanh toán:{" "}
-            <span className="text-[#6d4c41]">{order.paymentMethod}</span>
-          </p>
-        </section>
+        {/* --- MAIN ORDER CARD --- */}
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+          
+          {/* Order Meta Data Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 p-6 sm:p-8 bg-amber-50/30 border-b border-gray-100">
+            {/* ID */}
+            <div className="flex flex-col gap-1">
+              <span className="text-xs font-semibold uppercase tracking-wider text-gray-400">Mã đơn hàng</span>
+              <span className="text-lg font-bold text-gray-900">#{order.orderId}</span>
+            </div>
+            
+            {/* Status */}
+            <div className="flex flex-col gap-1">
+               <span className="text-xs font-semibold uppercase tracking-wider text-gray-400">Trạng thái</span>
+               <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 w-fit">
+                  {order.status}
+               </span>
+            </div>
 
-        <section>
-          <h2 className="text-lg font-medium border-b border-[#d7ccc8] pb-2 mb-2 text-[#4e342e]">
-            Sản phẩm đã đặt
-          </h2>
-          <div className="divide-y divide-[#d7ccc8]">
-            {order.items.map((item) => (
-              <div
-                key={item._id}
-                className="py-3 flex items-center justify-between"
-              >
-                <div className="flex items-center space-x-4">
-                  <img
-                    src={item.image?.[0]}
-                    alt={item.name}
-                    className="w-16 h-16 object-cover rounded border border-[#d7ccc8]"
-                  />
-                  <div>
-                    <p className="font-semibold text-[#4e342e]">{item.name}</p>
-                    <p className="text-xs text-[#6d4c41]">
+            {/* Date */}
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-white rounded-lg shadow-sm text-gray-400">
+                 <Calendar size={20} />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-xs text-gray-500">Ngày đặt</span>
+                <span className="font-medium text-gray-900">{new Date(order.createdAt).toLocaleDateString("vi-VN")}</span>
+              </div>
+            </div>
+
+            {/* Payment */}
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-white rounded-lg shadow-sm text-gray-400">
+                 <CreditCard size={20} />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-xs text-gray-500">Thanh toán</span>
+                <span className="font-medium text-gray-900">{order.paymentMethod}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Items List */}
+          <div className="p-6 sm:p-8">
+            <h3 className="text-lg font-bold text-gray-900 mb-6">Sản phẩm đã đặt</h3>
+            <div className="space-y-6">
+              {order.items.map((item) => (
+                <div
+                  key={item._id}
+                  className="flex items-start sm:items-center gap-4 group"
+                >
+                  {/* Image */}
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gray-50 rounded-xl border border-gray-100 overflow-hidden flex-shrink-0">
+                    <img
+                      src={item.image?.[0]}
+                      alt={item.name}
+                      className="w-full h-full object-contain mix-blend-multiply"
+                    />
+                  </div>
+
+                  {/* Details */}
+                  <div className="flex-1 min-w-0">
+                    <h4 className="font-semibold text-gray-900 text-base truncate pr-4">
+                      {item.name}
+                    </h4>
+                    <p className="text-sm text-gray-500 mt-0.5">
                       {item.brand} • {item.category}
                     </p>
-                    <p className="text-xs">Số lượng: {item.quantity}</p>
+                    <p className="text-sm text-gray-500 mt-0.5 sm:hidden">
+                       x{item.quantity}
+                    </p>
+                  </div>
+
+                  {/* Price & Qty (Desktop) */}
+                  <div className="text-right">
+                    <p className="font-bold text-gray-900">
+                      {(item.price * item.quantity).toLocaleString()}₫
+                    </p>
+                    <p className="text-sm text-gray-500 hidden sm:block">
+                      Số lượng: {item.quantity}
+                    </p>
                   </div>
                 </div>
-                <div className="text-right font-semibold text-[#4e342e]">
-                  {(item.price * item.quantity).toLocaleString()} ₫
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
+              ))}
+            </div>
 
-        <section className="border-t border-[#d7ccc8] pt-4">
-          <div className="flex justify-between text-lg font-semibold text-[#4e342e] mt-2">
-            <span>Thành tiền:</span>
-            <span>{order.total.toLocaleString()} ₫</span>
-          </div>
-        </section>
+            {/* Total Divider */}
+            <div className="my-8 border-t border-gray-100 border-dashed"></div>
 
-        <div className="text-center mt-6">
+            {/* Total Section */}
+            <div className="flex justify-between items-center">
+              <span className="text-lg font-medium text-gray-600">Tổng thanh toán</span>
+              <span className="text-2xl font-bold text-amber-700">
+                {order.total.toLocaleString()}₫
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* --- ACTIONS --- */}
+        <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
             to="/"
-            className="bg-[#6d4c41] hover:bg-[#5d4037] text-white py-2 px-4 rounded shadow"
+            className="flex items-center justify-center gap-2 px-6 py-3 bg-white border border-gray-200 text-gray-700 font-medium rounded-xl hover:bg-gray-50 hover:border-gray-300 transition-all w-full sm:w-auto"
           >
-            Quay lại trang chủ
+            <Home size={18} />
+            Về trang chủ
+          </Link>
+          
+          <Link
+            to="/shop"
+            className="flex items-center justify-center gap-2 px-8 py-3 bg-[#3e2723] hover:bg-[#5d4037] text-white font-bold rounded-xl shadow-lg shadow-amber-900/20 active:scale-[0.98] transition-all w-full sm:w-auto"
+          >
+            Tiếp tục mua sắm
+            <ArrowRight size={18} />
           </Link>
         </div>
+        
       </div>
     </div>
   );

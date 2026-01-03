@@ -1,60 +1,130 @@
 import React from "react";
 import { assets } from "../../assets/assets";
 import { Link } from "react-router-dom";
+import { Facebook, Instagram, Twitter, Mail, Phone, MapPin, ArrowRight } from "lucide-react";
 
 const Footer = () => {
   return (
-    <div className="bg-[#3e2723] text-white mt-20">
-      <div className="flex flex-col sm:grid grid-cols-[3fr_1fr_1fr] gap-14 px-6 md:px-20 py-12 text-sm">
-        {/* Logo and description */}
-        <div>
-          <img src={assets.company} className="mb-5 w-32" alt="Coffee Shop Logo" />
-          <p className="w-full md:w-2/3 text-amber-100 leading-relaxed">
-            Tại <span className="font-semibold">Velvet Roast</span>, chúng tôi
-            tin rằng mỗi tách cà phê đều kể một câu chuyện. Từ những hạt cà phê
-            được rang cho đến nụ cười được trao đi, sứ mệnh của chúng tôi là
-            mang lại sự ấm áp, hương vị và kết nối trong từng giọt cà phê.
-          </p>
+    <footer className="bg-[#2d1b18] text-white mt-24 border-t-4 border-amber-800">
+      
+      {/* --- Top Section: Newsletter --- */}
+      {/* <div className="bg-[#3e2723] py-12">
+        <div className="container mx-auto px-6 md:px-20 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="text-center md:text-left">
+            <h3 className="text-2xl font-serif font-semibold text-amber-100 mb-2">Đăng ký nhận tin</h3>
+            <p className="text-amber-200/80 text-sm">Nhận ưu đãi độc quyền và cập nhật mới nhất từ Velvet Roast.</p>
+          </div>
+          
+          <div className="flex w-full md:w-auto gap-2">
+            <input 
+              type="email" 
+              placeholder="Nhập email của bạn..." 
+              className="w-full md:w-80 px-4 py-3 rounded-l-lg bg-white/10 border border-amber-900/30 text-white placeholder-amber-200/50 focus:outline-none focus:ring-1 focus:ring-amber-500 transition-all"
+            />
+            <button className="bg-amber-700 hover:bg-amber-600 text-white px-6 py-3 rounded-r-lg font-medium transition-colors flex items-center gap-2">
+              Gửi <ArrowRight size={18} />
+            </button>
+          </div>
         </div>
+      </div> */}
 
-        {/* Links */}
-        <div>
-          <p className="text-xl font-semibold mb-5 text-amber-300">
-            Velvet Roast
-          </p>
-          <ul className="flex flex-col gap-1 text-amber-100">
-            <li className="hover:text-amber-300 cursor-pointer">
-              <Link to="/">Trang chủ</Link>
-            </li>
-            <li className="hover:text-amber-300 cursor-pointer">
-              <Link to="/about">Giới thiệu</Link>
-            </li>
-            <li className="hover:text-amber-300 cursor-pointer">
-              <Link to="/delivery">Giao hàng</Link>
-            </li>
-            <li className="hover:text-amber-300 cursor-pointer">
-              <Link to="/privacy">Quyền riêng tư</Link>
-            </li>
-            <li className="hover:text-amber-300 cursor-pointer">
-              <Link to="/policy">Chính sách mua hàng</Link></li>
-          </ul>
-        </div>
+      {/* --- Middle Section: Main Content --- */}
+      <div className="container mx-auto px-6 md:px-20 py-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
+          
+          {/* Column 1: Brand Info */}
+          <div className="space-y-6">
+            <img src={assets.company} className="w-32 brightness-0 invert opacity-90" alt="Velvet Roast" />
+            <p className="text-amber-100/80 text-sm leading-relaxed">
+              Mỗi tách cà phê là một câu chuyện. Sứ mệnh của chúng tôi là mang lại sự ấm áp và kết nối trong từng giọt cà phê rang xay thủ công.
+            </p>
+            {/* Social Icons */}
+            <div className="flex gap-4 pt-2">
+              {[Facebook, Instagram, Twitter].map((Icon, idx) => (
+                <a key={idx} href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-amber-700 hover:text-white transition-all duration-300 text-amber-200">
+                  <Icon size={20} />
+                </a>
+              ))}
+            </div>
+          </div>
 
-        {/* Contact */}
-        <div>
-          <p className="text-xl font-semibold mb-5 text-amber-300">Liên Hệ</p>
-          <ul className="flex flex-col gap-1 text-amber-100">
-            <li>+84 913 243 253</li>
-            <li>coffee@gmail.com</li>
-          </ul>
+          {/* Column 2: Quick Links */}
+          <div>
+            <h4 className="text-lg font-serif font-semibold text-amber-300 mb-6">Khám Phá</h4>
+            <ul className="space-y-3 text-sm text-amber-100/80">
+              {[
+                { name: "Trang chủ", path: "/" },
+                { name: "Cửa hàng", path: "/shop" },
+                { name: "Về chúng tôi", path: "/about" },
+                { name: "Blog cà phê", path: "/blog" },
+              ].map((link) => (
+                <li key={link.name}>
+                  <Link to={link.path} className="hover:text-amber-400 hover:pl-2 transition-all duration-300 inline-block">
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 3: Policy */}
+          <div>
+            <h4 className="text-lg font-serif font-semibold text-amber-300 mb-6">Chính Sách</h4>
+            <ul className="space-y-3 text-sm text-amber-100/80">
+              {[
+                { name: "Giao hàng & Vận chuyển", path: "/delivery" },
+                { name: "Đổi trả hàng", path: "/policy" },
+                { name: "Bảo mật thông tin", path: "/privacy" },
+                { name: "Điều khoản sử dụng", path: "/terms" },
+              ].map((link) => (
+                <li key={link.name}>
+                  <Link to={link.path} className="hover:text-amber-400 hover:pl-2 transition-all duration-300 inline-block">
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 4: Contact */}
+          <div>
+            <h4 className="text-lg font-serif font-semibold text-amber-300 mb-6">Liên Hệ</h4>
+            <ul className="space-y-4 text-sm text-amber-100/80">
+              <li className="flex items-start gap-3">
+                <MapPin className="mt-1 flex-shrink-0 text-amber-500" size={18} />
+                <span>123 Trần Hưng Đạo, Hà Nội</span>
+              </li>
+              <li className="flex items-center gap-3">
+                <Phone className="flex-shrink-0 text-amber-500" size={18} />
+                <span>+84 913 243 253</span>
+              </li>
+              <li className="flex items-center gap-3">
+                <Mail className="flex-shrink-0 text-amber-500" size={18} />
+                <span>contact@velvetroast.com</span>
+              </li>
+            </ul>
+          </div>
+
         </div>
       </div>
 
-      {/* Bottom bar */}
-      <div className="border-t border-amber-700 text-center py-5 text-amber-200 text-sm">
-        © 2025 Velvet Roast. All rights reserved.
+      {/* --- Bottom Section: Copyright --- */}
+      <div className="border-t border-white/10 bg-[#251614]">
+        <div className="container mx-auto px-6 md:px-20 py-6 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-amber-200/60">
+          <p>© 2026 Velvet Roast. All rights reserved.</p>
+          <div className="flex items-center gap-6">
+            <span>Design by You</span>
+            <div className="h-3 w-[1px] bg-white/20"></div>
+            <div className="flex gap-2">
+                {/* Simple CSS shapes to represent cards for visual trust */}
+                <div className="w-8 h-5 bg-white/10 rounded-sm"></div>
+                <div className="w-8 h-5 bg-white/10 rounded-sm"></div>
+                <div className="w-8 h-5 bg-white/10 rounded-sm"></div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </footer>
   );
 };
 

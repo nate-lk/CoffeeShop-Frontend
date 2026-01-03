@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { CartContext } from "../context/CartContext";
 import EmptyCart from "../components/layout/EmptyCart";
-import { Trash2, Plus, Minus, ShoppingBag } from "lucide-react";
+import { Trash2, Plus, Minus, ShoppingBag, ArrowRight } from "lucide-react";
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -49,12 +49,12 @@ const Cart = () => {
       cancelButtonText: "Hủy",
       confirmButtonColor: "#b71c1c",
       cancelButtonColor: "#6d4c41",
-      width: "320px",
+      width: "350px",
       customClass: {
-        title: "text-base",
-        popup: "p-4",
-        confirmButton: "text-sm px-3 py-2",
-        cancelButton: "text-sm px-3 py-2",
+        title: "text-lg font-bold",
+        popup: "rounded-xl",
+        confirmButton: "rounded-lg",
+        cancelButton: "rounded-lg",
       },
     }).then((result) => {
       if (result.isConfirmed) {
@@ -65,110 +65,133 @@ const Cart = () => {
   };
 
   return (
-    <div className="p-8 max-w-4xl mx-auto bg-[#f8f3ef] shadow-inner border border-[#d7ccc8] mt-10">
-      <h1 className="text-2xl font-bold mb-6 text-[#3e2723] border-b border-[#a1887f] pb-2 flex items-center gap-2">
-        <ShoppingBag className="w-6 h-6 text-[#4e342e]" />
-        Giỏ hàng
-      </h1>
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 max-w-5xl">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-8">
+        <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
+          <ShoppingBag className="w-8 h-8 text-amber-900" />
+          Giỏ hàng của bạn
+        </h1>
+        <span className="text-gray-500 font-medium">
+          {cartItems.length} sản phẩm
+        </span>
+      </div>
 
       {cartItems.length === 0 ? (
         <EmptyCart />
       ) : (
-        <div className="space-y-4">
-          {cartItems.map((item) => (
-            <div
-              key={item.cartId}
-              className="flex flex-col sm:flex-row sm:items-center sm:justify-between 
-  bg-[#fff8f0] border border-[#d7ccc8] shadow-sm py-2 p-4 
-  hover:shadow-md transition space-y-3 sm:space-y-0"
-            >
-              {/* Image */}
-              <Link
-                to={`/product/${item.productId}`}
-                className="flex justify-center sm:block"
+        <div className="flex flex-col gap-8">
+          {/* Cart Items List */}
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            {cartItems.map((item) => (
+              <div
+                key={item.cartId}
+                className="group flex flex-col sm:flex-row sm:items-center gap-6 p-6 border-b border-gray-100 last:border-0 hover:bg-gray-50/50 transition-colors duration-200"
               >
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className="w-24 h-24 object-cover  border border-[#bcaaa4]"
-                />
-              </Link>
-
-              {/* Info */}
-              <div className="flex-1 sm:ml-4 text-center sm:text-left">
-                <Link to={`/product/${item.productId}`}>
-                  <h2 className="font-semibold text-[#4e342e] text-base">
-                    {item.name}
-                  </h2>
-                  <p className="text-sm text-[#6d4c41]">
-                    {item.price.toLocaleString()}₫
-                  </p>
+                {/* Image */}
+                <Link
+                  to={`/product/${item.productId}`}
+                  className="flex-shrink-0 mx-auto sm:mx-0"
+                >
+                  <div className="w-24 h-24 sm:w-28 sm:h-28 bg-gray-50 rounded-xl overflow-hidden border border-gray-100">
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="w-full h-full object-contain mix-blend-multiply hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
                 </Link>
-              </div>
 
-              {/* Quantity */}
-              <div className="flex items-center justify-center sm:justify-start space-x-3">
-                <button
-                  onClick={() => decreaseQty(item.cartId)}
-                  className="bg-[#efebe9] border border-[#bcaaa4]  w-7 h-7 flex items-center justify-center text-[#4e342e] hover:bg-[#d7ccc8]"
-                >
-                  <Minus size={14} />
-                </button>
-                <input
-                  type="number"
-                  min="1"
-                  value={draftQty[item.cartId] ?? item.quantity}
-                  onChange={(e) =>
-                    handleDraftChange(item.cartId, e.target.value)
-                  }
-                  onBlur={() => handleBlur(item.cartId)}
-                  className="w-12 text-center border border-[#bcaaa4]  
-      [appearance:textfield] 
-      [&::-webkit-inner-spin-button]:appearance-none 
-      [&::-webkit-outer-spin-button]:appearance-none"
-                />
-                <button
-                  onClick={() => increaseQty(item.cartId)}
-                  className="bg-[#efebe9] border border-[#bcaaa4] w-7 h-7 flex items-center justify-center text-[#4e342e] hover:bg-[#d7ccc8]"
-                >
-                  <Plus size={14} />
-                </button>
-              </div>
+                {/* Info */}
+                <div className="flex-1 text-center sm:text-left">
+                  <Link
+                    to={`/product/${item.productId}`}
+                    className="block group-hover:text-amber-700 transition-colors"
+                  >
+                    <h2 className="font-bold text-gray-800 text-lg leading-tight mb-1">
+                      {item.name}
+                    </h2>
+                  </Link>
+                  <p className="text-gray-500 text-sm font-medium">
+                    Đơn giá: {item.price.toLocaleString()}₫
+                  </p>
+                </div>
 
-              {/* Total + Delete */}
-              <div className="flex justify-between sm:justify-end items-center sm:space-x-4 mt-2 sm:mt-0 w-[200px]">
-                <p className="font-semibold text-[#3e2723]">
-                  {(item.price * item.quantity).toLocaleString()}₫
-                </p>
-                <button
-                  onClick={() => removeItem(item.cartId)}
-                  className="text-[#b71c1c] hover:text-[#d32f2f] flex items-center gap-1 text-sm"
-                >
-                  <Trash2 size={14} />
-                  Xóa
-                </button>
-              </div>
-            </div>
-          ))}
+                {/* Controls Container */}
+                <div className="flex flex-row sm:flex-col md:flex-row items-center justify-between sm:justify-end gap-6 w-full sm:w-auto mt-2 sm:mt-0">
+                  
+                  {/* Quantity Selector (Modern Pill) */}
+                  <div className="flex items-center bg-white border border-gray-200 rounded-full shadow-sm px-1 py-1">
+                    <button
+                      onClick={() => decreaseQty(item.cartId)}
+                      className="w-8 h-8 flex items-center justify-center rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-900 transition-colors"
+                    >
+                      <Minus size={16} />
+                    </button>
+                    <input
+                      type="number"
+                      min="1"
+                      value={draftQty[item.cartId] ?? item.quantity}
+                      onChange={(e) =>
+                        handleDraftChange(item.cartId, e.target.value)
+                      }
+                      onBlur={() => handleBlur(item.cartId)}
+                      className="w-10 text-center text-sm font-semibold text-gray-900 bg-transparent border-none p-0 focus:ring-0 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none"
+                    />
+                    <button
+                      onClick={() => increaseQty(item.cartId)}
+                      className="w-8 h-8 flex items-center justify-center rounded-full text-gray-500 hover:bg-gray-100 hover:text-gray-900 transition-colors"
+                    >
+                      <Plus size={16} />
+                    </button>
+                  </div>
 
-          <div className="text-right mt-6 border-t border-[#a1887f] pt-4">
-            <p className="text-lg font-semibold text-[#3e2723]">
-              Tổng cộng: {totalAmount.toLocaleString()}₫
-            </p>
-            <div className="mt-4 space-x-3">
+                  {/* Price & Delete */}
+                  <div className="flex flex-col items-end gap-1 min-w-[100px]">
+                    <p className="font-bold text-gray-900 text-lg">
+                      {(item.price * item.quantity).toLocaleString()}₫
+                    </p>
+                    <button
+                      onClick={() => removeItem(item.cartId)}
+                      className="text-gray-400 hover:text-red-600 text-sm flex items-center gap-1 transition-colors"
+                    >
+                      <Trash2 size={14} />
+                      <span className="underline decoration-dotted">Xóa</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Summary / Actions */}
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-6">
+              
               <button
                 onClick={handleClearCart}
-                className="bg-[#6d4c41] text-white px-4 py-2   hover:bg-[#5d4037]"
+                className="text-gray-500 hover:text-red-600 font-medium text-sm transition-colors flex items-center gap-2"
               >
-                Xóa toàn bộ
+                <Trash2 size={16} />
+                Xóa toàn bộ giỏ hàng
               </button>
 
-              <button
-                className="bg-[#3e2723] text-white px-4 py-2   hover:bg-[#4e342e]"
-                onClick={() => navigate("/checkout")}
-              >
-                Thanh toán
-              </button>
+              <div className="flex flex-col items-end gap-4 w-full sm:w-auto">
+                <div className="flex items-baseline gap-4">
+                    <span className="text-gray-500 text-lg">Tổng cộng:</span>
+                    <span className="text-3xl font-bold text-amber-900">
+                        {totalAmount.toLocaleString()}₫
+                    </span>
+                </div>
+                
+                <button
+                  onClick={() => navigate("/checkout")}
+                  className="w-full sm:w-auto bg-[#3e2723] hover:bg-[#5d4037] text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg shadow-amber-900/20 active:scale-[0.98] transition-all flex items-center justify-center gap-3"
+                >
+                  Tiến hành thanh toán
+                  {/* ArrowRight is not in your original imports, so I used the one from lucide if available or just remove this icon if it breaks */}
+                </button>
+              </div>
             </div>
           </div>
         </div>

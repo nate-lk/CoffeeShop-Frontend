@@ -4,6 +4,7 @@ import { userApi } from "../../../api/user-api";
 import { ShopContext } from "../../context/ShopContext";
 import { useContext, useState } from "react";
 import Swal from "sweetalert2";
+import { Lock, KeyRound, Save } from "lucide-react";
 
 const UserChangePassword = () => {
   const navigate = useNavigate();
@@ -40,15 +41,13 @@ const UserChangePassword = () => {
           text: "Vui lòng đăng nhập lại.",
           confirmButtonText: "Đăng nhập",
           confirmButtonColor: "#3e2723",
-          width: "320px",
+          width: "350px",
           customClass: {
-            title: "text-base",
-            popup: "p-4",
-            confirmButton: "text-sm px-3 py-2",
-            cancelButton: "text-sm px-3 py-2",
+            title: "text-lg font-bold",
+            popup: "rounded-xl p-6",
+            confirmButton: "rounded-lg px-4 py-2",
           },
         }).then(() => {
-          // ví dụ: điều hướng về trang đăng nhập
           navigate("/login");
         });
         setToken(""); // Clear frontend token
@@ -62,64 +61,100 @@ const UserChangePassword = () => {
   };
 
   return (
-    <div className="flex justify-center py-10 px-4">
-      <div className="bg-[#fff8f0] border border-[#d7ccc8] shadow-inner w-full max-w-md p-8">
-        <h1 className="text-2xl font-bold text-center text-[#3e2723] mb-6 border-b border-[#a1887f] pb-2">
-          THAY ĐỔI MẬT KHẨU
-        </h1>
+    <div className="w-full max-w-2xl mx-auto">
+      {/* Header */}
+      <div className="mb-8">
+        <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+          <KeyRound className="text-amber-700" size={24} />
+          Đổi mật khẩu
+        </h2>
+        <p className="text-gray-500 mt-1 text-sm">
+          Quản lý và bảo vệ tài khoản của bạn bằng mật khẩu mạnh.
+        </p>
+      </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label className="block text-[#4e342e] font-semibold mb-1">
+      {/* Main Card */}
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-10">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          
+          {/* Current Password */}
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-gray-700">
               Mật khẩu hiện tại <span className="text-red-500">*</span>
             </label>
-            <input
-              type="password"
-              name="currentPassword"
-              placeholder="Nhập mật khẩu hiện tại"
-              value={form.currentPassword}
-              onChange={handleChange}
-              className="w-full border border-[#a1887f] p-2 bg-[#fff8f0] text-[#3e2723] focus:outline-none focus:border-[#5d4037]"
-              required
-            />
+            <div className="relative group">
+              <Lock
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-amber-600 transition-colors"
+                size={18}
+              />
+              <input
+                type="password"
+                name="currentPassword"
+                placeholder="••••••••"
+                value={form.currentPassword}
+                onChange={handleChange}
+                className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:bg-white focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 transition-all"
+                required
+              />
+            </div>
           </div>
 
-          <div>
-            <label className="block text-[#4e342e] font-semibold mb-1">
+          <div className="border-t border-gray-100 my-2"></div>
+
+          {/* New Password */}
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-gray-700">
               Mật khẩu mới <span className="text-red-500">*</span>
             </label>
-            <input
-              type="password"
-              name="newPassword"
-              placeholder="Nhập mật khẩu mới"
-              value={form.newPassword}
-              onChange={handleChange}
-              className="w-full border border-[#a1887f] p-2 bg-[#fff8f0] text-[#3e2723] focus:outline-none focus:border-[#5d4037]"
-              required
-            />
+            <div className="relative group">
+              <Lock
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-amber-600 transition-colors"
+                size={18}
+              />
+              <input
+                type="password"
+                name="newPassword"
+                placeholder="Nhập mật khẩu mới"
+                value={form.newPassword}
+                onChange={handleChange}
+                className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:bg-white focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 transition-all"
+                required
+              />
+            </div>
           </div>
 
-          <div>
-            <label className="block text-[#4e342e] font-semibold mb-1">
+          {/* Confirm Password */}
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-gray-700">
               Nhập lại mật khẩu mới <span className="text-red-500">*</span>
             </label>
-            <input
-              type="password"
-              name="confirmPassword"
-              placeholder="Xác nhận mật khẩu mới"
-              value={form.confirmPassword}
-              onChange={handleChange}
-              className="w-full border border-[#a1887f] p-2 bg-[#fff8f0] text-[#3e2723] focus:outline-none focus:border-[#5d4037]"
-              required
-            />
+            <div className="relative group">
+              <Lock
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-amber-600 transition-colors"
+                size={18}
+              />
+              <input
+                type="password"
+                name="confirmPassword"
+                placeholder="Xác nhận mật khẩu mới"
+                value={form.confirmPassword}
+                onChange={handleChange}
+                className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:bg-white focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 transition-all"
+                required
+              />
+            </div>
           </div>
 
-          <button
-            type="submit"
-            className="w-full py-2 bg-[#3e2723] hover:bg-[#4e342e] text-white font-medium transition-all"
-          >
-            Cập nhật mật khẩu
-          </button>
+          {/* Action Buttons */}
+          <div className="pt-4 flex justify-end">
+            <button
+              type="submit"
+              className="flex items-center gap-2 bg-[#3e2723] hover:bg-[#5d4037] text-white font-semibold py-3 px-8 rounded-xl shadow-lg shadow-amber-900/10 active:scale-[0.98] transition-all"
+            >
+              <Save size={18} />
+              Cập nhật mật khẩu
+            </button>
+          </div>
         </form>
       </div>
     </div>

@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Proto&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -14,7 +14,7 @@ a.active hr {
   }
 }
 
-@font-face {
+/* @font-face {
   font-family: 'MyFont';
   src: url('./assets/MyFont.ttf') format('truetype');
   font-weight: normal;
@@ -23,6 +23,28 @@ a.active hr {
 
 * {
   font-family: 'MyFont', sans-serif !important;
+} */
+
+/* 2. Apply globally */
+:root {
+  /* Be Vietnam Pro is excellent for UI, buttons, and descriptions */
+  --font-primary: 'Be Vietnam Pro', sans-serif;
+  
+  /* Lora is beautiful for "Story", "Titles", or "Best Seller" headers */
+  --font-secondary: 'Lora', serif;
+}
+
+body {
+  font-family: var(--font-primary);
+  /* Makes text look crisp and high-end */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #3e2723; /* Dark coffee brown looks better than pure black for text */
+}
+
+/* Optional: Helper class for luxury headings */
+.font-serif-luxury {
+  font-family: var(--font-secondary);
 }
 
 @media (max-width: 640px) {

@@ -1,9 +1,9 @@
 import { useState, useContext, useEffect } from "react";
 import { ShopContext } from "../context/ShopContext";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { userApi } from "../../api/user-api";
-import { oauthApi } from "../../api/oauth-api";
+import { Mail, Lock, ArrowRight, LogIn } from "lucide-react";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -27,7 +27,12 @@ const Login = () => {
       }
     } catch (error) {
       console.log(error);
-      toast.error("Lỗi khi đăng nhập. Vui lòng thử lại.");
+      const errorMessage =
+        error.response?.data?.message ||
+        error.message ||
+        "Đã xảy ra lỗi. Vui lòng thử lại.";
+
+      toast.error(errorMessage);
     }
   };
 
@@ -64,69 +69,116 @@ const Login = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#f8f3ef] px-4">
-      <div className="bg-[#fff8f0] border border-[#d7ccc8]   shadow-inner w-full max-w-md p-8">
-        <h1 className="text-2xl font-bold text-center text-[#3e2723] mb-6 border-b border-[#a1887f] pb-2">
-          ĐĂNG NHẬP
-        </h1>
-
-        <form onSubmit={onSubmitHandler} className="space-y-5">
-          <div>
-            <label className="block text-[#4e342e] font-semibold mb-1">
-              Email <span className="text-red-500">*</span>
-            </label>
-            <input
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
-              className="w-full border border-[#a1887f]  p-2 bg-[#fff8f0] text-[#3e2723] focus:outline-none focus:border-[#5d4037]"
-              type="email"
-              placeholder="your@email.com"
-              required
-            />
+    <div className="min-h-[80vh] flex items-center justify-center bg-gray-50/50 px-4 py-12">
+      <div className="w-full max-w-md">
+        {/* Main Card */}
+        <div className="bg-white rounded-2xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden p-8 sm:p-10">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Đăng nhập</h1>
           </div>
 
-          <div>
-            <label className="block text-[#4e342e] font-semibold mb-1">
-              Mật khẩu <span className="text-red-500">*</span>
-            </label>
-            <input
-              onChange={(e) => setPassword(e.target.value)}
-              value={password}
-              className="w-full border border-[#a1887f]  p-2 bg-[#fff8f0] text-[#3e2723] focus:outline-none focus:border-[#5d4037]"
-              type="password"
-              placeholder="Nhập mật khẩu"
-              required
-            />
+          <form onSubmit={onSubmitHandler} className="space-y-6">
+            {/* Email Input */}
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-gray-700 ml-1">
+                Email
+              </label>
+              <div className="relative group">
+                <Mail
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-amber-600 transition-colors"
+                  size={20}
+                />
+                <input
+                  onChange={(e) => setEmail(e.target.value)}
+                  value={email}
+                  type="email"
+                  placeholder="name@example.com"
+                  className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:bg-white focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 transition-all"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Password Input */}
+            <div className="space-y-2">
+              <div className="flex justify-between items-center ml-1">
+                <label className="text-sm font-semibold text-gray-700">
+                  Mật khẩu
+                </label>
+                {/* --- ADDED FORGOT PASSWORD LINK HERE --- */}
+                <Link 
+                  to="/forgot-password" 
+                  className="text-sm font-medium text-amber-600 hover:text-amber-800 hover:underline transition-colors"
+                >
+                  Quên mật khẩu?
+                </Link>
+              </div>
+              <div className="relative group">
+                <Lock
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-amber-600 transition-colors"
+                  size={20}
+                />
+                <input
+                  onChange={(e) => setPassword(e.target.value)}
+                  value={password}
+                  type="password"
+                  placeholder="••••••••"
+                  className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:bg-white focus:border-amber-500 focus:ring-4 focus:ring-amber-500/10 transition-all"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              className="w-full bg-[#3e2723] hover:bg-[#5d4037] text-white font-bold py-3.5 rounded-xl shadow-lg shadow-amber-900/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+            >
+              <LogIn size={20} />
+              Đăng nhập
+            </button>
+          </form>
+
+          {/* Divider */}
+          <div className="relative my-8">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t border-gray-200"></span>
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-white px-2 text-gray-400 font-medium">
+                Đăng nhập với
+              </span>
+            </div>
           </div>
 
-          <button
-            className="w-full py-2   bg-[#3e2723] hover:bg-[#4e342e] text-white font-medium transition-all"
-            type="submit"
-          >
-            Đăng nhập
-          </button>
-
-          <button
-            type="button"
-            onClick={() => navigate("/register")}
-            className="w-full py-2   bg-[#d7ccc8] hover:bg-[#bcaaa4] text-[#3e2723] font-medium transition-all"
-          >
-            Đăng ký tài khoản
-          </button>
-
+          {/* Google Login */}
           <button
             type="button"
             onClick={onGoogleLogin}
-            className="w-full flex items-center justify-center gap-2 py-2   bg-white border border-gray-300 hover:bg-gray-100 text-gray-700 font-medium shadow-sm transition-all mt-4"
+            className="w-full flex items-center justify-center gap-3 py-3 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-medium rounded-xl transition-all"
           >
             <img
               src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
-              alt="Google Logo"
+              alt="Google"
               className="w-5 h-5"
             />
-            Đăng nhập với Google
+            Google
           </button>
-        </form>
+
+          {/* Footer / Register Link */}
+          <div className="mt-8 text-center">
+            <p className="text-gray-600 text-sm">
+              Chưa có tài khoản?{" "}
+              <Link
+                to="/register"
+                className="text-amber-700 font-bold hover:underline inline-flex items-center gap-1"
+              >
+                Đăng ký ngay <ArrowRight size={14} />
+              </Link>
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );
