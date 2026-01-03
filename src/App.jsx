@@ -23,8 +23,9 @@ import SearchBar from "./components/layout/SearchBar.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import TopScroll from "./components/layout/TopScroll.jsx";
-import AdBanner from "./components/ad/AdBanner.jsx";
+// import AdBanner from "./components/ad/AdBanner.jsx";
 import useClickGuard from "./utilities/clickGuard.js";
+// this is for preventing multiple clicks within short time
 
 const App = () => {
   useClickGuard(250);
@@ -32,17 +33,18 @@ const App = () => {
   const isUserRoute = location.pathname.startsWith("/user");
 
   return (
-    <div className="flex flex-col min-h-screen">
+
+    <div className="flex flex-col min-h-screen pt-20 sm:pt-24">
+      
       <ToastContainer position="top-left" autoClose={1500} />
 
-      {/* Navbar and banners */}
       <Navbar />
-      <AdBanner />
+      
+      {/* <AdBanner /> */}
       <TopScroll />
 
       {location.pathname === "/shop" && <SearchBar />}
 
-      {/* Main content grows to fill remaining space */}
       <main
         className={
           isUserRoute
@@ -70,7 +72,6 @@ const App = () => {
         </Routes>
       </main>
 
-      {/* Footer */}
       <Footer />
     </div>
   );
