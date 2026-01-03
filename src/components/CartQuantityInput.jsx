@@ -1,7 +1,7 @@
 import debounce from "lodash.debounce";
 import axios from "axios";
 import { useRef, useContext } from "react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { ShopContext } from "../context/ShopContext";
 import { CartContext } from "../context/CartContext";
 

@@ -1,6 +1,6 @@
 import { UserContext } from "./UserContext";
 import { useState, useEffect, useContext } from "react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { ClipLoader } from "react-spinners";
 import { userApi } from "../../api/user-api";
 import { ShopContext } from "./ShopContext";

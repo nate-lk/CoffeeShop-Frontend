@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { useNavigate, Link } from "react-router-dom";
 import { userApi } from "../../api/user-api";
 import { Mail, Lock, UserPlus, ArrowRight } from "lucide-react";

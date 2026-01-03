@@ -1,4 +1,4 @@
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { userApi } from "../../../api/user-api";
 import { ShopContext } from "../../context/ShopContext";

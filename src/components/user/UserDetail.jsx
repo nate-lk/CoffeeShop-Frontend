@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import UserAddModal from "./UserAddModal";
 import UserEditModal from "./UserEditModal";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { ShopContext } from "../../context/ShopContext";
 import Swal from "sweetalert2";
 import { userDetailApi } from "../../../api/user-api";

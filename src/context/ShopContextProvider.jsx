@@ -1,6 +1,6 @@
 import { ShopContext } from "./ShopContext";
 import { useState, useEffect } from "react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { ClipLoader } from "react-spinners";
 import { categoryApi, productApi } from "../../api/product-api";
 

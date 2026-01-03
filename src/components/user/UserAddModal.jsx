@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { ShopContext } from "../../context/ShopContext";
 import { userDetailApi } from "../../../api/user-api";
 import { X, MapPin, User, Phone } from "lucide-react";
