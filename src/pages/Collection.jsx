@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
 import Title from "../components/layout/Title";
 import ProductCard from "../components/ProductCard";
+import { Link } from "react-router-dom";
 import {
   Filter,
   ChevronDown,
@@ -306,7 +307,8 @@ const Collection = () => {
           <p className="text-gray-500 text-lg">Không tìm thấy sản phẩm nào.</p>
           <button
             onClick={() => {
-              /* clear filters logic */
+              /* clear filters logic here */
+              // e.g., setCategory([]); setMinPrice(0); setMaxPrice(0);
             }}
             className="mt-4 text-amber-700 font-medium hover:underline"
           >
@@ -316,9 +318,17 @@ const Collection = () => {
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 gap-y-10">
           {filterProducts.map((item) => (
-            <div key={item._id} className="group">
+            /* 1. Moved 'key' to the Link (outermost element)
+         2. Added 'to' prop for navigation
+         3. Added 'block' to make the link behave like a container
+      */
+            <Link
+              key={item._id}
+              to={`/product/${item._id}`}
+              className="group block"
+            >
               <ProductCard product={item} />
-            </div>
+            </Link>
           ))}
         </div>
       )}
