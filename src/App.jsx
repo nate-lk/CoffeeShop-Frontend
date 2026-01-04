@@ -16,6 +16,7 @@ import {
   Privacy,
   Checkout,
   Stripe,
+  ForgetPassword,
 } from "./pages";
 import Navbar from "./components/layout/Navbar.jsx";
 import Footer from "./components/layout/Footer.jsx";
@@ -71,6 +72,7 @@ const App = () => {
           <Route path="/user/*" element={<UserDashboard />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/stripe" element={<Stripe />} />
+          <Route path="/forget-password" element={<ForgetPassword />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

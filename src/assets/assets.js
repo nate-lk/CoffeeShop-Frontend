@@ -17,6 +17,7 @@ import cross_icon from './cross_icon.png'
 import company from './company.png'
 import qr from './qr.png'
 import MyFont from './MyFont.ttf'
+import shop_inside from './shop_inside.jpg'
 
 export const assets = {
     logo,
@@ -37,5 +38,6 @@ export const assets = {
     cross_icon,
     company,
     qr,
-    MyFont
+    MyFont,
+    shop_inside
 }

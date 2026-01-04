@@ -108,7 +108,7 @@ const Login = () => {
                   Mật khẩu
                 </label>
                 <Link 
-                  to="/forgot-password" 
+                  to="/forget-password" 
                   className="text-sm font-medium text-amber-600 hover:text-amber-800 hover:underline transition-colors"
                 >
                   Quên mật khẩu?
