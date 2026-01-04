@@ -26,15 +26,6 @@ const BestSeller = () => {
 
   return (
     <div className="relative my-10">
-      {/* Header */}
-      <div className="text-center text-3xl py-8">
-        <Title text1="BÁN CHẠY " text2="NHẤT" />
-        <p className="w-3/4 m-auto text-xs sm:text-sm md:text-base text-gray-700">
-          Thử để cảm nhận sự khác biệt — những hạt cà phê được yêu thích nhất
-          tại Velvet Roast.
-        </p>
-      </div>
-
       {/* Scroll Buttons */}
       <button
         onClick={() => scroll("left")}
@@ -61,10 +52,6 @@ const BestSeller = () => {
             to={`/product/${item._id}`}
             className="snap-start flex-shrink-0"
           >
-            {/* FIX HERE: 
-                1. Set a fixed width (w-48 sm:w-56) so the card knows how big to be in the carousel.
-                2. Removed 'border', 'shadow', 'bg-white' from this div because ProductCard already handles that.
-            */}
             <div className="w-48 sm:w-56 h-full">
               <ProductCard product={item} />
             </div>

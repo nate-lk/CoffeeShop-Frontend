@@ -25,14 +25,6 @@ const LatestCollection = () => {
 
   return (
     <div className="relative my-10">
-      {/* Header */}
-      <div className="text-center py-8 text-3xl">
-        <Title text1="SẢN PHẨM " text2="MỚI NHẤT" />
-        <p className="w-3/4 m-auto text-xs sm:text-sm md:text-base text-gray-700">
-          Cà phê ngon nhất thế giới — rang xay thủ công, hương vị đậm đà và tinh
-          tế.
-        </p>
-      </div>
 
       {/* Scroll Buttons */}
       <button
@@ -61,7 +53,6 @@ const LatestCollection = () => {
             to={`/product/${item._id}`}
             className="snap-start flex-shrink-0"
           >
-            {/* FIX: Removed borders/shadows and added fixed width (w-48 sm:w-56) */}
             <div className="w-48 sm:w-56 h-full">
               <ProductCard product={item} />
             </div>
