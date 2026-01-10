@@ -1,34 +1,40 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom'; // Assuming you use react-router-dom
-import { Mail, ArrowLeft, Loader2, CheckCircle, AlertCircle } from 'lucide-react'; // Make sure to install lucide-react if not already
-import { userApi } from '../../api/user-api';
+import React, { useState } from "react";
+import { Link } from "react-router-dom"; // Assuming you use react-router-dom
+import {
+  Mail,
+  ArrowLeft,
+  Loader2,
+  CheckCircle,
+  AlertCircle,
+} from "lucide-react"; // Make sure to install lucide-react if not already
+import { userApi } from "../../api/user-api";
 
 const ForgetPassword = () => {
-  const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage('');
-    setError('');
+    setMessage("");
+    setError("");
     setIsLoading(true);
 
     try {
-      // Replace with your actual backend URL
       const response = await userApi.forgotPassword(email);
+      const data = response.data;
 
-      const data = await response.json();
-
-      if (response.ok) {
-        setMessage('Nếu email này tồn tại, chúng tôi đã gửi hướng dẫn đặt lại mật khẩu.');
-        setEmail('');
+      if (data.success) {
+        setMessage(
+          "Velvet Roast đã gửi hướng dẫn đặt lại mật khẩu. Vui lòng kiểm tra email của bạn."
+        );
+        setEmail("");
       } else {
-        setError(data.message || 'Đã xảy ra lỗi. Vui lòng thử lại.');
+        setError(data.message || "Đã xảy ra lỗi. Vui lòng thử lại.");
       }
     } catch (err) {
-      setError('Lỗi kết nối. Vui lòng kiểm tra mạng và thử lại.');
+      setError("Lỗi kết nối. Vui lòng kiểm tra mạng và thử lại.");
     } finally {
       setIsLoading(false);
     }
@@ -37,15 +43,16 @@ const ForgetPassword = () => {
   return (
     <div className="min-h-[80vh] flex items-center justify-center bg-gray-50/50 px-4 py-12">
       <div className="w-full max-w-md">
-        
         {/* Main Card */}
         <div className="bg-white rounded-2xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden p-8 sm:p-10">
-          
           {/* Header */}
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Quên mật khẩu?</h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              Quên mật khẩu?
+            </h1>
             <p className="text-gray-500 text-sm">
-              Nhập địa chỉ email của bạn và chúng tôi sẽ gửi liên kết để đặt lại mật khẩu.
+              Nhập địa chỉ email của bạn và chúng tôi sẽ gửi liên kết để đặt lại
+              mật khẩu.
             </p>
           </div>
 
@@ -66,7 +73,6 @@ const ForgetPassword = () => {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            
             {/* Email Input */}
             <div className="space-y-2">
               <label className="text-sm font-semibold text-gray-700 ml-1">
@@ -93,7 +99,7 @@ const ForgetPassword = () => {
               type="submit"
               disabled={isLoading}
               className={`w-full bg-[#3e2723] hover:bg-[#5d4037] text-white font-bold py-3.5 rounded-xl shadow-lg shadow-amber-900/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2
-                ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}
+                ${isLoading ? "opacity-70 cursor-not-allowed" : ""}
               `}
             >
               {isLoading ? (
@@ -102,7 +108,7 @@ const ForgetPassword = () => {
                   Đang gửi...
                 </>
               ) : (
-                'Gửi liên kết'
+                "Gửi liên kết"
               )}
             </button>
           </form>
@@ -117,7 +123,6 @@ const ForgetPassword = () => {
               Quay lại Đăng nhập
             </Link>
           </div>
-
         </div>
       </div>
     </div>

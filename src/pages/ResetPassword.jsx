@@ -18,6 +18,7 @@ const ResetPassword = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -36,10 +37,9 @@ const ResetPassword = () => {
     try {
       // Replace with your actual backend URL
       const response = await userApi.resetPassword(password, token);
+      const data = response.data;
 
-      const data = await response.json();
-
-      if (response.ok) {
+      if (data.success) {
         setMessage("Mật khẩu đã được cập nhật thành công!");
         setTimeout(() => navigate("/login"), 3000); // Redirect to login after 3 seconds
       } else {
@@ -131,7 +131,7 @@ const ResetPassword = () => {
                   size={20}
                 />
                 <input
-                  type={showPassword ? "text" : "password"}
+                  type={showConfirmPassword ? "text" : "password"}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="••••••••"
@@ -144,6 +144,13 @@ const ResetPassword = () => {
                   `}
                   required
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
               </div>
             </div>
 
