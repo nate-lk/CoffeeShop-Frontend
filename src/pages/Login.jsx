@@ -11,7 +11,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const { setToken } = useContext(ShopContext);
   const navigate = useNavigate();
-
+  const googleUrl = import.meta.env.VITE_GOOGLE_LOGIN_URL;
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     try {
@@ -44,7 +44,7 @@ const Login = () => {
     const top = window.screen.height / 2 - height / 2;
 
     window.open(
-      "https://api.velvetroast.store/auth/google/login",
+      googleUrl + "/auth/google/login",
       "GoogleLogin",
       `width=${width},height=${height},top=${top},left=${left}`
     );
@@ -52,7 +52,7 @@ const Login = () => {
 
   useEffect(() => {
     const messageListener = (event) => {
-      if (event.origin !== "https://api.velvetroast.store") {
+      if (event.origin !== googleUrl) {
         return;
       }
       console.log("Received message:", event.data);
