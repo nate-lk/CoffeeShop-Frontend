@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom'; // Assuming you use react-router-dom
 import { Mail, ArrowLeft, Loader2, CheckCircle, AlertCircle } from 'lucide-react'; // Make sure to install lucide-react if not already
+import { userApi } from '../../api/user-api';
 
 const ForgetPassword = () => {
   const [email, setEmail] = useState('');
@@ -16,11 +17,7 @@ const ForgetPassword = () => {
 
     try {
       // Replace with your actual backend URL
-      const response = await fetch('http://localhost:5000/api/forgot-password', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      });
+      const response = await userApi.forgotPassword(email);
 
       const data = await response.json();
 

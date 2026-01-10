@@ -14,4 +14,5 @@ export { default as Policy } from "./Policy.jsx";
 export { default as Checkout } from "./Checkout.jsx";
 export { default as Stripe } from "./Stripe.jsx";
 export { default as Privacy } from "./Privacy.jsx";
-export { default as ForgetPassword } from "./ForgetPassword.jsx";
+export { default as ForgotPassword } from "./ForgotPassword.jsx";
+export { default as ResetPassword } from "./ResetPassword.jsx";

@@ -38,6 +38,10 @@ export const userApi = {
 
   changePassword(data) {
     return apiAuth.put(`${BASE}/change-password`, data);
+  },
+
+  forgotPassword(email) {
+    return apiPublic.post(`${BASE}/forgot-password`, { email });
   }
 
 };
