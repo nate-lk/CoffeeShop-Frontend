@@ -74,7 +74,7 @@ const App = () => {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/stripe" element={<Stripe />} />
           <Route path="/forget-password" element={<ForgotPassword />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

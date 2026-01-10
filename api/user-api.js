@@ -36,8 +36,8 @@ export const userApi = {
     return apiAuth.get(`${BASE}/single`);
   },
 
-  changePassword(data) {
-    return apiAuth.put(`${BASE}/change-password`, data);
+  resetPassword(password, token) {
+    return apiAuth.post(`${BASE}/reset-password/${token}`, { password });
   },
 
   forgotPassword(email) {
