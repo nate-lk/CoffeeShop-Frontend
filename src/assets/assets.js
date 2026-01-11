@@ -18,6 +18,7 @@ import company from './company.png'
 import qr from './qr.png'
 import MyFont from './MyFont.ttf'
 import shop_inside from './shop_inside.jpg'
+import momoIcon from './momo.png'
 
 export const assets = {
     logo,
@@ -39,5 +40,6 @@ export const assets = {
     company,
     qr,
     MyFont,
-    shop_inside
+    shop_inside,
+    momoIcon
 }

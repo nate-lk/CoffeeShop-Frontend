@@ -16,6 +16,10 @@ export const orderApi = {
     return apiAuth.post(`${BASE}/create/transfer`, orderData);
   },
 
+  createOrderMomo(orderData) {
+    return apiAuth.post(`${BASE}/create/momo`, orderData);
+  },
+
   getOneOrder(orderId) {
     return apiAuth.get(`${BASE}/get-one/${orderId}`);
   },
