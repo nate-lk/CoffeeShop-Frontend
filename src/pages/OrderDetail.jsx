@@ -197,7 +197,7 @@ const OrderDetail = () => {
                   {order.paymentMethod || "—"}
                 </span>
               </div>
-              <div className="flex justify-between">
+              {/* <div className="flex justify-between">
                 <span className="text-gray-600">Trạng thái thanh toán</span>
                 <span
                   className={
@@ -208,7 +208,7 @@ const OrderDetail = () => {
                 >
                   {order.isPaid ? "Đã thanh toán" : "Chưa thanh toán"}
                 </span>
-              </div>
+              </div> */}
             </div>
           </div>
 

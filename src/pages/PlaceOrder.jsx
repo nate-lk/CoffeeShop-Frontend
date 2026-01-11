@@ -2,7 +2,15 @@ import React, { useEffect, useState, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 import { orderApi } from "../../api/order-api";
-import { CheckCircle, Calendar, CreditCard, Package, ArrowRight, Home, Loader2 } from "lucide-react";
+import {
+  CheckCircle,
+  Calendar,
+  CreditCard,
+  Package,
+  ArrowRight,
+  Home,
+  Loader2,
+} from "lucide-react";
 
 const PlaceOrder = () => {
   const { orderId } = useParams();
@@ -24,6 +32,38 @@ const PlaceOrder = () => {
     fetchOrder();
   }, [orderId, token]);
 
+  // --- Helper Functions for Status ---
+  const getStatusStyle = (status) => {
+    switch (status) {
+      case "PAID":
+        return "bg-green-50 text-green-700 ring-1 ring-green-600/20";
+      case "PENDING_PAYMENT":
+        return "bg-amber-50 text-amber-700 ring-1 ring-amber-600/20";
+      case "CANCELLED":
+        return "bg-red-50 text-red-700 ring-1 ring-red-600/20";
+      case "PROCESSING":
+        return "bg-blue-50 text-blue-700 ring-1 ring-blue-600/20";
+      case "REFUNDED":
+        return "bg-purple-50 text-purple-700 ring-1 ring-purple-600/20";
+      case "FAILED":
+        return "bg-red-50 text-red-700 ring-1 ring-red-600/20";
+      default:
+        return "bg-gray-100 text-gray-700 ring-1 ring-gray-600/20";
+    }
+  };
+
+  const getStatusLabel = (status) => {
+    const labels = {
+      PENDING_PAYMENT: "Chờ thanh toán",
+      PAID: "Đã thanh toán",
+      CANCELLED: "Đã hủy",
+      PROCESSING: "Đang xử lý",
+      FAILED: "Thất bại",
+      REFUNDED: "Đã hoàn tiền",
+    };
+    return labels[status] || status;
+  };
+
   if (loading)
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center text-amber-800 gap-3">
@@ -36,17 +76,20 @@ const PlaceOrder = () => {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4">
         <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center text-red-500">
-           <Package size={32} />
+          <Package size={32} />
         </div>
-        <h2 className="text-xl font-bold text-gray-800">Không tìm thấy đơn hàng</h2>
-        <Link to="/" className="text-amber-700 hover:underline">Quay về trang chủ</Link>
+        <h2 className="text-xl font-bold text-gray-800">
+          Không tìm thấy đơn hàng
+        </h2>
+        <Link to="/" className="text-amber-700 hover:underline">
+          Quay về trang chủ
+        </Link>
       </div>
     );
 
   return (
     <div className="min-h-screen bg-gray-50/50 py-12 px-4 sm:px-6">
       <div className="max-w-3xl mx-auto">
-        
         {/* --- SUCCESS HEADER --- */}
         <div className="text-center mb-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
           <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full text-green-600 mb-6 shadow-sm ring-8 ring-green-50">
@@ -62,49 +105,64 @@ const PlaceOrder = () => {
 
         {/* --- MAIN ORDER CARD --- */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-          
           {/* Order Meta Data Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 p-6 sm:p-8 bg-amber-50/30 border-b border-gray-100">
             {/* ID */}
             <div className="flex flex-col gap-1">
-              <span className="text-xs font-semibold uppercase tracking-wider text-gray-400">Mã đơn hàng</span>
-              <span className="text-lg font-bold text-gray-900">#{order.orderId}</span>
+              <span className="text-xs font-semibold uppercase tracking-wider text-gray-400">
+                Mã đơn hàng
+              </span>
+              <span className="text-lg font-bold text-gray-900">
+                #{order.orderId}
+              </span>
             </div>
-            
-            {/* Status */}
+
+            {/* Status - UPDATED SECTION */}
             <div className="flex flex-col gap-1">
-               <span className="text-xs font-semibold uppercase tracking-wider text-gray-400">Trạng thái</span>
-               <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 w-fit">
-                  {order.status}
-               </span>
+              <span className="text-xs font-semibold uppercase tracking-wider text-gray-400">
+                Trạng thái
+              </span>
+              <span
+                className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wide w-fit ${getStatusStyle(
+                  order.status
+                )}`}
+              >
+                {getStatusLabel(order.status)}
+              </span>
             </div>
 
             {/* Date */}
             <div className="flex items-center gap-3">
               <div className="p-2 bg-white rounded-lg shadow-sm text-gray-400">
-                 <Calendar size={20} />
+                <Calendar size={20} />
               </div>
               <div className="flex flex-col">
                 <span className="text-xs text-gray-500">Ngày đặt</span>
-                <span className="font-medium text-gray-900">{new Date(order.createdAt).toLocaleDateString("vi-VN")}</span>
+                <span className="font-medium text-gray-900">
+                  {new Date(order.createdAt).toLocaleDateString("vi-VN")}
+                </span>
               </div>
             </div>
 
             {/* Payment */}
             <div className="flex items-center gap-3">
               <div className="p-2 bg-white rounded-lg shadow-sm text-gray-400">
-                 <CreditCard size={20} />
+                <CreditCard size={20} />
               </div>
               <div className="flex flex-col">
                 <span className="text-xs text-gray-500">Thanh toán</span>
-                <span className="font-medium text-gray-900">{order.paymentMethod}</span>
+                <span className="font-medium text-gray-900">
+                  {order.paymentMethod}
+                </span>
               </div>
             </div>
           </div>
 
           {/* Items List */}
           <div className="p-6 sm:p-8">
-            <h3 className="text-lg font-bold text-gray-900 mb-6">Sản phẩm đã đặt</h3>
+            <h3 className="text-lg font-bold text-gray-900 mb-6">
+              Sản phẩm đã đặt
+            </h3>
             <div className="space-y-6">
               {order.items.map((item) => (
                 <div
@@ -129,7 +187,7 @@ const PlaceOrder = () => {
                       {item.brand} • {item.category}
                     </p>
                     <p className="text-sm text-gray-500 mt-0.5 sm:hidden">
-                       x{item.quantity}
+                      x{item.quantity}
                     </p>
                   </div>
 
@@ -151,7 +209,9 @@ const PlaceOrder = () => {
 
             {/* Total Section */}
             <div className="flex justify-between items-center">
-              <span className="text-lg font-medium text-gray-600">Tổng thanh toán</span>
+              <span className="text-lg font-medium text-gray-600">
+                Tổng thanh toán
+              </span>
               <span className="text-2xl font-bold text-amber-700">
                 {order.total.toLocaleString()}₫
               </span>
@@ -168,7 +228,7 @@ const PlaceOrder = () => {
             <Home size={18} />
             Về trang chủ
           </Link>
-          
+
           <Link
             to="/shop"
             className="flex items-center justify-center gap-2 px-8 py-3 bg-[#3e2723] hover:bg-[#5d4037] text-white font-bold rounded-xl shadow-lg shadow-amber-900/20 active:scale-[0.98] transition-all w-full sm:w-auto"
@@ -177,7 +237,6 @@ const PlaceOrder = () => {
             <ArrowRight size={18} />
           </Link>
         </div>
-        
       </div>
     </div>
   );
