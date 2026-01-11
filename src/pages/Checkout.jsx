@@ -14,6 +14,7 @@ import {
 import UserDefaultAddress from "../components/user/UserDefaultAddress";
 import PaymentMethod from "../components/PaymentMethod";
 import { orderApi } from "../../api/order-api";
+import { momoApi } from "../../api/payment-api";
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -48,39 +49,50 @@ const Checkout = () => {
         defaultAddress,
       };
 
-      let res;
+      let resOrder;
 
       switch (paymentMethod) {
         case "COD":
-          res = await orderApi.createOrderCOD(orderPayload);
+          resOrder = await orderApi.createOrderCOD(orderPayload);
           break;
         case "TRANSFER":
-          res = await orderApi.createOrderTransfer(orderPayload);
+          resOrder = await orderApi.createOrderTransfer(orderPayload);
           break;
         case "STRIPE":
-          res = await orderApi.createOrderStripe(orderPayload);
+          resOrder = await orderApi.createOrderStripe(orderPayload);
           break;
         case "MOMO":
-          res = await orderApi.createOrderMomo(orderPayload);
+          resOrder = await orderApi.createOrderMomo(orderPayload);
           break;
 
         default:
           return toast.error("Phương thức thanh toán không hợp lệ.");
       }
 
-      if (!res.data.success) {
-        return toast.error(res.data.message || "Đặt hàng thất bại.");
+      if (!resOrder.data.success) {
+        return toast.error(resOrder.data.message || "Đặt hàng thất bại.");
       }
 
       if (paymentMethod === "COD" || paymentMethod === "TRANSFER") {
         toast.success("Đặt hàng thành công!");
         clearCart();
-        return navigate(`/place-order/${res.data.orderId}`);
+        return navigate(`/place-order/${resOrder.data.orderId}`);
       }
 
       if (paymentMethod === "STRIPE") {
         toast.info("Tạo đơn hàng thanh toán với STRIPE");
         return navigate(`/stripe`);
+      }
+
+      if (paymentMethod === "MOMO") {
+        // this is order placement only
+        // we have to prompt the payment API as well
+        // toast.info("Tạo đơn hàng thanh toán với MOMO");
+        const resMomo = await momoApi.momoPayment({
+          orderId: resOrder.data.orderId,
+          amount: totalAmount
+        });
+        window.location.href = resMomo.data.payUrl;
       }
     } catch (err) {
       console.error(err);
