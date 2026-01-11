@@ -8,6 +8,7 @@ import {
   Cart,
   Login,
   PlaceOrder,
+  PlaceOrderRedirect,
   OrderDetail,
   Register,
   UserDashboard,
@@ -17,7 +18,7 @@ import {
   Checkout,
   Stripe,
   ForgotPassword,
-  ResetPassword
+  ResetPassword,
 } from "./pages";
 import Navbar from "./components/layout/Navbar.jsx";
 import Footer from "./components/layout/Footer.jsx";
@@ -75,6 +76,7 @@ const App = () => {
           <Route path="/stripe" element={<Stripe />} />
           <Route path="/forget-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
+          <Route path="/place-order" element={<PlaceOrderRedirect />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
