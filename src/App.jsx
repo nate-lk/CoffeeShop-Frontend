@@ -37,11 +37,11 @@ const App = () => {
   return (
     <div className="flex flex-col min-h-screen pt-20 sm:pt-24">
       <Toaster
-        position="top-center"
+        position="bottom-center"
         richColors
         expand={true}
         closeButton
-        duration={1500} // 1.5 seconds
+        duration={1500}
       />
 
       <Navbar />
