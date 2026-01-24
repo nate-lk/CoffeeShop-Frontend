@@ -44,7 +44,7 @@ const Login = () => {
     const top = window.screen.height / 2 - height / 2;
 
     window.open(
-      "https://api.velvetroast.store/auth/google/login",
+      "https://api.velvetroast.store/api/auth/google/login",
       "GoogleLogin",
       `width=${width},height=${height},top=${top},left=${left}`
     );
