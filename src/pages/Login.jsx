@@ -43,8 +43,11 @@ const Login = () => {
     const left = window.screen.width / 2 - width / 2;
     const top = window.screen.height / 2 - height / 2;
 
+    // here we call the backend gateway for google login
+    // in local it is localhost:4001/auth/google/login
+    // then this will connect with google for the oauth process
     window.open(
-      "https://api.velvetroast.store/api/auth/google/login",
+      googleUrl + "/auth/google/login",
       "GoogleLogin",
       `width=${width},height=${height},top=${top},left=${left}`
     );
