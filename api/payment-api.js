@@ -6,6 +6,6 @@ const BASE_MOMO = import.meta.env.VITE_API_MOMO;
 export const momoApi = {
   // protected route
   momoPayment(paymentData) {
-    return apiAuth.post(`${BASE_MOMO}`, paymentData);
+    return apiAuth.post(`${BASE_MOMO}/create`, paymentData);
   },
 };

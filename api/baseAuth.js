@@ -1,7 +1,7 @@
 import axios from "axios";
 import Swal from "sweetalert2";
 
-const BASE_REFRESH = import.meta.env.VITE_API_REFRESH;;
+const BASE_REFRESH = import.meta.env.VITE_API_REFRESH;
 
 const api = axios.create({
   withCredentials: true
