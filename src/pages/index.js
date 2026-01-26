@@ -17,3 +17,4 @@ export { default as Stripe } from "./Stripe.jsx";
 export { default as Privacy } from "./Privacy.jsx";
 export { default as ForgotPassword } from "./ForgotPassword.jsx";
 export { default as ResetPassword } from "./ResetPassword.jsx";
+export { default as Terms } from "./Terms.jsx";

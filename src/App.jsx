@@ -19,6 +19,7 @@ import {
   Stripe,
   ForgotPassword,
   ResetPassword,
+  Terms
 } from "./pages";
 import Navbar from "./components/layout/Navbar.jsx";
 import Footer from "./components/layout/Footer.jsx";
