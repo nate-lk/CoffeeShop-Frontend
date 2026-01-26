@@ -72,6 +72,7 @@ const App = () => {
           <Route path="/orders/:orderId" element={<OrderDetail />} />
           <Route path="/policy" element={<Policy />} />
           <Route path="/privacy" element={<Privacy />} />
+          <Route path="/terms" element={<Terms />} />
           <Route path="/user/*" element={<UserDashboard />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/stripe" element={<Stripe />} />
