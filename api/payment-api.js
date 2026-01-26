@@ -8,4 +8,12 @@ export const momoApi = {
   momoPayment(paymentData) {
     return apiAuth.post(`${BASE_MOMO}/create`, paymentData);
   },
+
+  momoVerify(orderId) {
+    return apiAuth.post(`${BASE_MOMO}/verify-transaction`, { orderId });
+  },
+
+  momoVerifiedCallback(momoPayload) {
+    return apiAuth.post(`${BASE_MOMO}/verified-callback`, momoPayload);
+  }
 };
