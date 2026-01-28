@@ -128,12 +128,12 @@ const Product = () => {
           </h1>
 
           {/* Rating Placeholder (Optional visual) */}
-          <div className="flex items-center gap-2 mb-6">
+          {/* <div className="flex items-center gap-2 mb-6">
             <div className="flex text-amber-400">
                {[...Array(5)].map((_, i) => <Star key={i} size={18} fill="currentColor" />)}
             </div>
             <span className="text-sm text-gray-500 font-medium">(120 đánh giá)</span>
-          </div>
+          </div> */}
 
           {/* Price & Stock */}
           <div className="flex items-end gap-4 mb-8">
