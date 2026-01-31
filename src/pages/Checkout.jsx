@@ -25,7 +25,11 @@ const Checkout = () => {
   const handleOrderPlacement = async () => {
     try {
       setLoading(true);
-      if (!token) return toast.error("Bạn cần đăng nhập để đặt hàng.");
+
+      if (!token) {
+        toast.error("Bạn cần đăng nhập để đặt hàng.");
+        return;
+      }
 
       if (!defaultAddress) {
         Swal.fire({
@@ -64,39 +68,39 @@ const Checkout = () => {
         case "MOMO":
           resOrder = await orderApi.createOrderMomo(orderPayload);
           break;
-
         default:
-          return toast.error("Phương thức thanh toán không hợp lệ.");
-      }
-
-      if (!resOrder.data.success) {
-        return toast.error(resOrder.data.message || "Đặt hàng thất bại.");
+          toast.error("Phương thức thanh toán không hợp lệ.");
+          return;
       }
 
       if (paymentMethod === "COD" || paymentMethod === "TRANSFER") {
         toast.success("Đặt hàng thành công!");
         clearCart();
-        return navigate(`/place-order/${resOrder.data.orderId}`);
+        navigate(`/place-order/${resOrder.data.orderId}`);
+        return;
       }
 
       if (paymentMethod === "STRIPE") {
-        toast.info("Tạo đơn hàng thanh toán với STRIPE");
-        return navigate(`/stripe`);
+        navigate(`/stripe`);
+        return;
       }
 
       if (paymentMethod === "MOMO") {
-        // this is order placement only
-        // we have to prompt the payment API as well
-        // toast.info("Tạo đơn hàng thanh toán với MOMO");
         const resMomo = await momoApi.momoPayment({
           orderId: resOrder.data.orderId,
-          amount: totalAmount
+          amount: totalAmount,
         });
         window.location.href = resMomo.data.payUrl;
       }
     } catch (err) {
-      console.error(err);
-      toast.error("Có lỗi xảy ra.");
+      if (err.response?.data?.code === "STOCK_UNAVAILABLE") {
+        toast.warning(
+          "Một số sản phẩm hiện không đủ hàng. Vui lòng kiểm tra lại giỏ hàng.",
+        );
+        return;
+      }
+
+      toast.error(err.response?.data?.message || "Có lỗi xảy ra khi đặt hàng.");
     } finally {
       setLoading(false);
     }
