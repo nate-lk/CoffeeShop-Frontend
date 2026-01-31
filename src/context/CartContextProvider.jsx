@@ -242,7 +242,7 @@ const CartContextProvider = (props) => {
 
   useEffect(() => {
     updateCartContext();
-  }, [token]);
+  }, [token, cartItems]);
 
   useEffect(() => {
     const fetchCart = async () => {
